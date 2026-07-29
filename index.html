@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Leboncoin x datashake, le cheminement vers la content factory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{
+    font-family:'Season Sans';
+    src:url('assets/fonts/SeasonSans-Medium.woff2') format('woff2');
+    font-weight:normal;font-style:normal;font-display:block;
+  }
+  :root{
+    --noir:#101010; --blanc:#FFFFFF; --beige:#F3EDE8;
+    --gris-clair:#F5F5F5; --gris-medium:#E8E8E8;
+    --bleu:#77B0ED; --jaune:#FFFF7D; --kaki:#ADAC2F;
+    --ink:#101010; --ink70:rgba(16,16,16,.7); --ink50:rgba(16,16,16,.5);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:'Inter',sans-serif;font-weight:400;color:var(--ink);font-size:15px;line-height:1.5;background:#1B1916;overflow:hidden}
+
+  /* ===== moteur de deck ===== */
+  #stage{position:absolute;top:0;left:50%;width:1280px;height:720px;transform-origin:top center}
+  .slide{width:1280px;height:720px;position:absolute;inset:0;overflow:hidden;background:var(--blanc);padding:78px 52px 40px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .slide.on{opacity:1;pointer-events:auto}
+  .slide.beige{background:var(--beige)}
+  .slide.noir{background:var(--noir);color:#fff}
+
+  .hd{position:absolute;top:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--gris-medium)}
+  .hd img{height:15px}
+  .hd span{font-size:10.5px;color:var(--ink70)}
+  .slide.noir .hd{border-bottom-color:rgba(255,255,255,.18)}
+  .slide.noir .hd span{color:rgba(255,255,255,.6)}
+
+  h1,h2,h3,h4,.ss,.num,.bignum,.kicker{font-family:'Season Sans','Inter',sans-serif;font-weight:normal}
+  h1{font-size:33px;letter-spacing:-0.02em;line-height:1.1;margin-bottom:7px}
+  .slide.noir h1{color:#fff}
+  .lead{font-size:14.5px;color:var(--ink70);max-width:1000px;margin-bottom:18px}
+  .slide.noir .lead{color:rgba(255,255,255,.75)}
+  .lead b,p b,li b,td b{font-weight:700;color:var(--ink)}
+  .slide.noir b,.card.dark b,.card.dark strong,.step b,.inter b{color:#fff}
+
+  .inter{display:flex;flex-direction:column;justify-content:center;height:100%}
+  .inter .kicker{font-size:15px;color:var(--jaune);margin-bottom:14px}
+  .inter h1{font-size:52px;max-width:940px}
+  .inter .sub{font-size:17px;color:rgba(255,255,255,.7);max-width:800px;margin-top:16px}
+  .inter ol{list-style:none;margin-top:28px;border-top:1px solid rgba(255,255,255,.18);max-width:940px}
+  .inter ol li{display:flex;gap:20px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:14px;color:rgba(255,255,255,.85);cursor:pointer;transition:color .15s}
+  .inter ol li:hover{color:var(--jaune)}
+  .inter ol li span{font-family:'Season Sans','Inter',sans-serif;color:rgba(255,255,255,.45);min-width:26px}
+
+  .card{background:#fff;border:1px solid var(--gris-medium);border-radius:8px;padding:15px 17px}
+  .card.dark{background:var(--noir);border:none;color:#fff}
+  .card.beige{background:var(--beige);border-color:#E7DFD7}
+  .card.plain{background:var(--gris-clair);border-color:var(--gris-medium)}
+  .card h3{font-size:16.5px;margin-bottom:6px}
+  .card h4{font-size:14px;margin-bottom:5px}
+  .card p,.card li{font-size:12.5px;color:var(--ink70)}
+  .card.dark p,.card.dark li,.card.dark td{color:rgba(255,255,255,.82)}
+
+  .tag{display:inline-block;font-family:'Season Sans','Inter',sans-serif;font-size:11.5px;padding:2px 10px;border-radius:4px;background:var(--noir);color:#fff}
+  .tag.gris{background:#5A5A5A}
+  .tag.clair{background:#9A9A9A}
+  .tag.ghost{background:transparent;border:1px solid var(--gris-medium);color:var(--ink70)}
+  .card.dark .tag.j,.slide.noir .tag.j{background:var(--jaune);color:var(--noir)}
+  .card.dark .tag.b,.slide.noir .tag.b{background:var(--bleu);color:var(--noir)}
+  .card.dark .tag.k,.slide.noir .tag.k{background:var(--kaki);color:#fff}
+  .tag.bl{background:var(--bleu);color:var(--noir)}
+  .tag.ja{background:var(--jaune);color:var(--noir)}
+  .tag.ka{background:var(--kaki);color:#fff}
+
+  ul.cl{list-style:none}
+  ul.cl li{padding-left:15px;position:relative;margin-bottom:5px;line-height:1.42}
+  ul.cl li::before{content:"";position:absolute;left:0;top:6px;width:7px;height:7px;border-radius:2px;background:var(--noir)}
+  .card.dark ul.cl li::before,.slide.noir ul.cl li::before{background:var(--bleu)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+  .g-2-1{display:grid;grid-template-columns:2fr 1fr;gap:15px}
+  .g-1-2{display:grid;grid-template-columns:1fr 2fr;gap:15px}
+  .mt{margin-top:14px}
+  .bignum{font-size:36px;letter-spacing:-0.02em;line-height:1}
+  .src{font-size:10px;color:var(--ink50);position:absolute;bottom:11px;left:52px;right:52px}
+  .slide.noir .src{color:rgba(255,255,255,.45)}
+
+  table{width:100%;border-collapse:collapse}
+  th{font-family:'Season Sans','Inter',sans-serif;font-weight:normal;font-size:11.5px;text-align:left;color:var(--ink50);padding:6px 9px 6px 0;border-bottom:1px solid var(--noir)}
+  td{font-size:12px;padding:6px 9px 6px 0;border-bottom:1px solid var(--gris-medium);vertical-align:top;line-height:1.4}
+  .slide.noir th{color:rgba(255,255,255,.5);border-bottom-color:rgba(255,255,255,.4)}
+  .slide.noir td{color:rgba(255,255,255,.82);border-bottom-color:rgba(255,255,255,.14)}
+  .compact td{padding:5px 9px 5px 0;font-size:11.5px}
+  .compact th{padding:5px 9px 5px 0}
+
+  .frise{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+  .frise .mcol{border-radius:8px;padding:8px;cursor:pointer;transition:background .15s}
+  .frise .mcol:hover,.frise .mcol.sel{background:var(--gris-clair)}
+  .slide.beige .frise .mcol:hover,.slide.beige .frise .mcol.sel{background:#fff}
+  .frise .m{font-family:'Season Sans','Inter',sans-serif;font-size:12px;color:var(--ink50);padding-bottom:6px;border-bottom:1px solid var(--noir);margin-bottom:8px}
+  .bar{border-radius:4px;padding:5px 9px;font-size:10.5px;margin-bottom:5px;line-height:1.3}
+  .bar.n{background:var(--noir);color:#fff}
+  .bar.g{background:#5A5A5A;color:#fff}
+  .bar.l{background:var(--gris-clair);color:var(--ink70);border:1px solid var(--gris-medium)}
+
+  .step{background:var(--noir);color:#fff;border-radius:8px;padding:14px}
+  .step .n{font-family:'Season Sans','Inter',sans-serif;font-size:12px;color:var(--bleu);margin-bottom:5px;display:block}
+  .step h3{color:#fff;font-size:15px;margin-bottom:5px}
+  .step p{font-size:11.5px;color:rgba(255,255,255,.8);line-height:1.4}
+
+  /* ===== interactions ===== */
+  .switch{display:inline-flex;border:1px solid var(--noir);border-radius:999px;background:#fff;overflow:hidden;vertical-align:middle}
+  .switch button{appearance:none;border:none;background:none;cursor:pointer;font:600 12px 'Inter',sans-serif;color:var(--ink70);padding:7px 16px;transition:background .15s,color .15s}
+  .switch button[aria-pressed="true"]{background:var(--noir);color:#fff}
+  .ctl-lab{font-family:'Season Sans','Inter',sans-serif;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink50);margin-right:8px}
+  .hint{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--ink50)}
+  .hint::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--jaune);border:1px solid var(--kaki)}
+  .slide.noir .hint{color:rgba(255,255,255,.5)}
+
+  /* spine workflow */
+  .spine{display:flex;gap:6px;margin-top:12px}
+  .wfstep{flex:1;position:relative}
+  .wfstep:not(:last-child)::after{content:"\203A";position:absolute;right:-6px;top:34px;color:var(--ink50);font-size:15px;z-index:2}
+  .wfbtn{appearance:none;width:100%;text-align:left;cursor:pointer;font-family:'Inter',sans-serif;color:var(--ink);background:#fff;border:1px solid var(--gris-medium);border-radius:8px;padding:9px 9px 10px;transition:border-color .15s,transform .12s,box-shadow .15s}
+  .wfbtn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(16,16,16,.10)}
+  .wfbtn.sel{border-color:var(--noir);box-shadow:0 6px 18px rgba(16,16,16,.12)}
+  .wfbtn .wn{font-family:'Season Sans','Inter',sans-serif;font-size:10px;color:var(--ink50)}
+  .wfbtn .wnm{display:block;font-family:'Season Sans','Inter',sans-serif;font-size:12px;line-height:1.2;margin:2px 0 6px;min-height:29px}
+  .wfbtn .who{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:1px 7px;border-radius:999px}
+  .who.machine{background:var(--bleu);color:var(--noir)}
+  .who.humain{background:var(--jaune);color:var(--noir)}
+  .who.mixte{background:var(--kaki);color:#fff}
+  .wfbtn[data-side="machine"]{border-top:3px solid var(--bleu)}
+  .wfbtn[data-side="humain"]{border-top:3px solid var(--jaune)}
+  .wfbtn[data-side="mixte"]{border-top:3px solid var(--kaki)}
+  .wfdetail{margin-top:12px;border:1px solid var(--gris-medium);border-radius:8px;background:#fff;padding:14px 18px;min-height:148px}
+  .wfdetail h3{font-size:16px;margin-bottom:4px}
+  .wfdetail .base{font-size:12.5px;color:var(--ink70);margin:2px 0 10px;max-width:1000px}
+  .wfdetail .cells{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .wfdetail .cell{border-radius:6px;padding:9px 12px;font-size:12px;background:var(--gris-clair);color:var(--ink70)}
+  .wfdetail .cell b{display:block;font-family:'Season Sans','Inter',sans-serif;font-weight:normal;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink50);margin-bottom:3px}
+  .wfdetail .cell.hlA,.wfdetail .cell.hlB{outline:2px solid var(--noir);background:#fff}
+  .wfdetail .cell.accel{background:var(--jaune)}
+  .wfdetail .cell.accel b{color:var(--ink70)}
+  .backlog{display:flex;gap:8px;margin-top:2px}
+  .bcard{flex:1;border:1px solid var(--gris-medium);border-radius:8px;background:var(--gris-clair);padding:8px 10px}
+  .bcard .bt{font-size:11px;font-weight:600;line-height:1.3}
+  .bcard .bm{display:flex;gap:5px;margin-top:5px}
+  .chip{font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:1px 7px;border-radius:999px;background:#fff;border:1px solid var(--gris-medium);color:var(--ink70)}
+  .chip.sc{background:var(--noir);color:#fff;border-color:var(--noir)}
+
+  /* onglets */
+  .tabs{display:flex;gap:6px;margin-bottom:12px}
+  .tabs button{appearance:none;border:1px solid var(--gris-medium);background:#fff;color:var(--ink70);font:600 12px 'Inter',sans-serif;padding:7px 15px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
+  .tabs button:hover{border-color:var(--noir)}
+  .tabs button[aria-pressed="true"]{background:var(--noir);color:#fff;border-color:var(--noir)}
+  .tabpane{display:none}
+  .tabpane.on{display:block}
+
+  /* lignes cliquables */
+  tr.rowbtn{cursor:pointer}
+  tr.rowbtn:hover td{background:rgba(16,16,16,.035)}
+  .slide.beige tr.rowbtn:hover td{background:rgba(255,255,255,.65)}
+  tr.rowbtn.sel td{background:var(--jaune)}
+  tr.rowbtn.sel td b{color:var(--noir)}
+
+  /* phases cliquables */
+  .phasecard{cursor:pointer;transition:transform .12s,box-shadow .15s;position:relative}
+  .phasecard:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(16,16,16,.16)}
+  .phasecard .liv{display:none;margin-top:9px;font-size:11.5px;border-top:1px solid rgba(255,255,255,.25);padding-top:8px}
+  .phasecard.open .liv{display:block}
+
+  /* captures */
+  .shot{border:1px solid var(--gris-medium);border-radius:8px;overflow:hidden;background:#fff;cursor:zoom-in;position:relative;transition:transform .12s,box-shadow .15s}
+  .shot:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(16,16,16,.16)}
+  .shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
+  .shot .cap{position:absolute;left:0;right:0;bottom:0;background:rgba(16,16,16,.82);color:#fff;font-size:10.5px;padding:5px 10px}
+  .lightbox{position:fixed;inset:0;background:rgba(10,9,8,.9);display:none;align-items:center;justify-content:center;z-index:300;cursor:zoom-out;padding:30px}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:96%;max-height:92%;border-radius:6px;box-shadow:0 20px 80px rgba(0,0,0,.6)}
+  .lightbox .lcap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,.8);font-size:12px}
+
+  .logo16{width:15px;height:15px;vertical-align:-3px;margin-right:7px;border-radius:3px}
+
+  /* mock AI Overview */
+  .aio{border:1px solid var(--gris-medium);border-radius:10px;background:#fff;padding:14px 16px}
+  .aio .aio-h{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;margin-bottom:8px}
+  .aio .aio-h .spark{width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#4285F4,#9B72CB,#D96570);display:inline-block}
+  .aio p{font-size:11.5px;color:var(--ink70);line-height:1.5}
+  .aio .aio-srcs{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+  .aio .aio-srcs span{font-size:10px;border:1px solid var(--gris-medium);border-radius:999px;padding:2px 9px;color:var(--ink70);background:var(--gris-clair)}
+  .aio .aio-srcs span.lbc{background:var(--jaune);border-color:var(--kaki);color:var(--noir);font-weight:700}
+
+  /* ===== chrome du deck ===== */
+  #deckbar{position:fixed;left:0;right:0;bottom:0;height:44px;display:flex;align-items:center;gap:14px;padding:0 16px;background:rgba(16,16,16,.92);color:#fff;z-index:200;backdrop-filter:blur(6px)}
+  #deckbar button{appearance:none;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;border-radius:6px;font:600 12px 'Inter',sans-serif;padding:5px 12px;cursor:pointer}
+  #deckbar button:hover{background:rgba(255,255,255,.12)}
+  #counter{font-family:'Season Sans','Inter',sans-serif;font-size:12px;color:rgba(255,255,255,.75);min-width:56px}
+  #prog{flex:1;height:3px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+  #prog i{display:block;height:100%;background:var(--jaune);width:0;transition:width .25s}
+  #deckbar .kbd{font-size:10.5px;color:rgba(255,255,255,.4)}
+  #toc{position:fixed;inset:0;background:rgba(16,16,16,.96);z-index:250;display:none;overflow-y:auto;padding:60px 8vw;color:#fff}
+  #toc.open{display:block}
+  #toc h2{font-family:'Season Sans','Inter',sans-serif;font-weight:normal;font-size:26px;margin-bottom:18px;color:var(--jaune)}
+  #toc ol{list-style:none;columns:2;column-gap:60px}
+  #toc li{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.14);cursor:pointer;font-size:14.5px;break-inside:avoid}
+  #toc li:hover{color:var(--jaune)}
+  #toc li span{font-family:'Season Sans','Inter',sans-serif;color:rgba(255,255,255,.4);margin-right:14px}
+
+  @media print{
+    body{overflow:visible;background:#fff}
+    #stage{position:static;transform:none!important;left:0;width:auto;height:auto}
+    .slide{position:relative;opacity:1;pointer-events:auto;page-break-after:always}
+    #deckbar,#toc,.lightbox{display:none!important}
+  }
+  @page{size:1280px 720px;margin:0}
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+<!-- S1 · COVER -->
+<section class="slide noir on" data-t="Partie 01, le cheminement">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-White.svg" alt=""><span>confidentiel</span></div>
+  <div class="inter">
+    <div class="kicker">Partie 01</div>
+    <h1>Le cheminement vers la content factory</h1>
+    <p class="sub">Comment on passe de vos 18 contenus par mois, contraints par la mesure et la publication, à une chaîne outillée dont vous devenez propriétaires.</p>
+    <ol id="tocCover">
+      <li data-go="1"><span>01</span>Ce que la content factory change concrètement</li>
+      <li data-go="2"><span>02</span>L'anatomie du cockpit : machinerie et valorisation</li>
+      <li data-go="3"><span>03</span>Le workflow déroulé, étape par étape</li>
+      <li data-go="4"><span>04</span>Les quatre phases, les chantiers, le calendrier</li>
+      <li data-go="8"><span>05</span>La donnée qui alimente la machine : data interne, sources publiques, API</li>
+      <li data-go="13"><span>06</span>AI Overviews et visibilité IA, intégrées au dispositif</li>
+    </ol>
+  </div>
+  <p class="src">Document interactif : flèches du clavier pour naviguer, clic sur les éléments soulignés d'un point jaune, clic sur les captures pour zoomer.</p>
+</section>
+
+<!-- S2 · CE QUE ÇA CHANGE -->
+<section class="slide" data-t="Ce que ça change">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Ce que la content factory change, concrètement</h1>
+  <p class="lead">Le sujet n'est pas de produire plus vite du contenu. C'est de <b>supprimer les étapes qui vous coûtent du temps sans créer de valeur</b>, et de rendre chaque décision éditoriale justifiable par une donnée.</p>
+  <div style="margin-bottom:10px;display:flex;align-items:center;gap:14px;">
+    <span class="ctl-lab">Comparer</span>
+    <div class="switch" id="swAvant"><button data-v="deux" aria-pressed="true">Les deux</button><button data-v="auj" aria-pressed="false">Aujourd'hui</button><button data-v="cf" aria-pressed="false">Avec la content factory</button></div>
+    <span class="hint">le bascule masque une colonne pour lire l'écart</span>
+  </div>
+  <table id="tblChange">
+    <tr><th style="width:135px;">Étape du cycle</th><th class="c-auj" style="width:360px;">Aujourd'hui</th><th class="c-cf" style="width:380px;">Avec la content factory</th><th>Ce que vous y gagnez</th></tr>
+    <tr><td><b>Trouver les sujets</b></td><td class="c-auj">Veille manuelle, arbitrage en réunion, priorisation à l'intuition</td><td class="c-cf">Backlog alimenté en continu par la veille, les tendances et vos trending topics, chaque sujet arrive scoré</td><td>Le comité tranche au lieu de chercher</td></tr>
+    <tr><td><b>Prioriser</b></td><td class="c-auj">Discussion, pas de critère commun entre SEO et édito</td><td class="c-cf">Score sur 100, quatre familles de critères, sortie P1 / P2 / P3</td><td>Un langage commun SEO et édito</td></tr>
+    <tr><td><b>Briefer</b></td><td class="c-auj">Brief rédigé à la main, sources à rassembler</td><td class="c-cf">Brief généré : structure Hn, intention SERP, sources, data propriétaire déjà injectée</td><td>Le temps de brief passe dans l'expertise</td></tr>
+    <tr><td><b>Produire</b></td><td class="c-auj">Rédaction externalisée, allers-retours</td><td class="c-cf">Rédaction experte outillée, scoring sémantique jusqu'à dépasser le meilleur concurrent</td><td>Moins d'allers-retours, niveau constant</td></tr>
+    <tr><td><b>Publier</b></td><td class="c-auj">Saisie champ par champ, images à redimensionner</td><td class="c-cf">Fiche prête à publier poussée dans Jira, formats anticipés pour votre futur outil</td><td>Le goulot est contourné, pas subi</td></tr>
+    <tr><td><b>Mesurer</b></td><td class="c-auj">Angle mort : impossible de dire si un contenu fonctionne</td><td class="c-cf">Chaque contenu part avec son objectif, ses signaux, son suivi SEO et IA</td><td>On sait quoi refaire et quoi arrêter</td></tr>
+  </table>
+  <div class="card dark mt"><p><b>Les deux goulots que vous nous avez décrits, la mesure et la publication, sont traités en premier.</b> La mesure parce que chaque contenu part avec son objectif et ses signaux de succès. La publication parce que la sortie du dispositif s'adapte à votre back-office actuel, puis à votre futur outil sans rien reconstruire.</p></div>
+</section>
+
+<!-- S3 · ANATOMIE COCKPIT -->
+<section class="slide beige" data-t="L'anatomie du cockpit">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>L'anatomie du cockpit</h1>
+  <p class="lead">Un seul outil, deux moteurs. La <b>machinerie</b> instruit et produit. La <b>valorisation</b> maintient vivants les contenus qui reposent sur de la donnée qui bouge. <span class="hint">cliquez sur un module pour le détail</span></p>
+  <div class="grid2">
+    <div class="card dark">
+      <span class="tag b">Moteur 01</span>
+      <h3 style="margin-top:9px;">La machinerie</h3>
+      <p style="margin-bottom:9px;">Elle transforme un signal de demande en contenu prêt à publier.</p>
+      <ul class="cl mod-list" style="font-size:12px;">
+        <li data-d="Sources branchées en continu : veille sectorielle, tendances de recherche, gaps concurrents, vos trending topics internes et les requêtes Search Console qui perdent des impressions. Chaque signal crée ou réveille un sujet au backlog." style="cursor:pointer;"><b>Collecte</b> : veille, tendances, concurrents, vos trending topics, requêtes GSC en perte</li>
+        <li data-d="Pour chaque sujet retenu par le premier filtre : intention réelle de la SERP, scrape du top 3 (structures Hn, formats, angles), questions associées, présence d'un AI Overview. C'est la matière qui rend le brief indiscutable." style="cursor:pointer;"><b>Instruction</b> : intention SERP, scrape du top 3, PAA, formats repérés chez les concurrents</li>
+        <li data-d="Une vingtaine de critères répartis en quatre familles (Demande 30, Accessibilité 25, Business 30, Effort 15). Sortie en P1 / P2 / P3. Le score classe, le comité décide." style="cursor:pointer;"><b>Scoring</b> : la vingtaine de critères, sortie P1 / P2 / P3</li>
+        <li data-d="Title, meta, structure Hn déduite du top 10, bloc à retenir (le format que les moteurs IA extraient), sources primaires vérifiées, données à intégrer, maillage avec ancres vers vos pages business." style="cursor:pointer;"><b>Génération de brief</b> : title, meta, Hn, bloc à retenir, sources, angle, maillage</li>
+        <li data-d="Rédaction experte par verticale, scoring sémantique itératif jusqu'à dépasser le meilleur concurrent, relecture humaine systématique sur les sujets sensibles (immobilier, financier, réglementaire)." style="cursor:pointer;"><b>Production</b> : rédaction experte, scoring sémantique, relecture humaine sur YMYL</li>
+        <li data-d="La fiche part dans votre outil (Jira aujourd'hui) : contenu prêt à coller champ par champ, images préparées aux bons formats, statut, owner et date. Le goulot de publication est contourné, pas subi." style="cursor:pointer;"><b>Sortie</b> : fiche Jira, statut, owner, date de publication</li>
+      </ul>
+    </div>
+    <div class="card dark">
+      <span class="tag k">Moteur 02</span>
+      <h3 style="margin-top:9px;">La valorisation</h3>
+      <p style="margin-bottom:9px;">Elle empêche vos contenus de vieillir, et transforme la donnée en actif renouvelable.</p>
+      <ul class="cl mod-list" style="font-size:12px;">
+        <li data-d="Les contenus adossés à de la donnée vivante (prix au m², taux, cotes, volumes) sont rafraîchis à date fixe, automatiquement re-proposés au flux avec la donnée à jour." style="cursor:pointer;"><b>Rotation programmée</b> : prix au m² par quartier, taux, cotes, volumes rafraîchis à date fixe</li>
+        <li data-d="Deux déclencheurs : un contenu non retouché depuis six mois, ou une donnée source qui a bougé (nouveau millésime DVF, nouvel arrêté, nouvelle édition d'un indice). Le sujet remonte seul en tête de backlog." style="cursor:pointer;"><b>Détection d'obsolescence</b> : contenus non retouchés depuis six mois, ou donnée source qui a bougé</li>
+        <li data-d="Le cockpit prépare la mise à jour (ce qui a changé, les chiffres frais, les sections à retoucher), l'humain valide. Un refresh coûte une fraction d'une création et récupère des positions perdues." style="cursor:pointer;"><b>Refresh assisté</b> : le cockpit prépare la mise à jour, l'humain valide</li>
+        <li data-d="Un baromètre national qui fonctionne est décliné en versions régionales ou par segment quand le volume de recherche le justifie. Un actif, plusieurs pages." style="cursor:pointer;"><b>Déclinaison</b> : un baromètre national décliné en régions quand le volume le justifie</li>
+        <li data-d="Qui reprend vos chiffres : presse, comparateurs, et surtout les moteurs IA (ChatGPT, Perplexity, AI Overviews). La citation est suivie comme un indicateur à part entière, au même titre qu'une position." style="cursor:pointer;"><b>Suivi de citation</b> : qui reprend vos chiffres, quels moteurs IA vous citent</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card mt" id="modDetail"><p><b>Pourquoi séparer les deux.</b> La machinerie répond à la question « quoi produire maintenant », la valorisation à la question « qu'est-ce qui perd de la valeur en ce moment ». Ce sont deux flux distincts, et le second est celui que la plupart des dispositifs éditoriaux oublient, alors que c'est lui qui fait tenir le SEO dans la durée.</p></div>
+</section>
+
+<!-- S4 · WORKFLOW INTERACTIF -->
+<section class="slide" data-t="Le workflow, étape par étape">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Le workflow déroulé, étape par étape</h1>
+  <p class="lead" style="margin-bottom:10px;">La même colonne vertébrale, deux états : elle tourne dès aujourd'hui dans vos contraintes, et se reconfigure quand votre outil de publication et vos accès data évoluent. <span class="hint">cliquez sur chaque étape</span></p>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px;">
+    <span class="ctl-lab">État du dispositif</span>
+    <div class="switch" id="swEtat"><button data-e="auj" aria-pressed="true">Aujourd'hui</button><button data-e="fin" aria-pressed="false">Fin d'année</button></div>
+    <span id="etatCaption" style="font-size:11.5px;color:var(--ink70);"></span>
+  </div>
+  <div class="backlog" id="wfBacklog"></div>
+  <div class="spine" id="wfSpine"></div>
+  <div class="wfdetail" id="wfDetail"></div>
+</section>
+
+<!-- S5 · QUATRE PHASES -->
+<section class="slide" data-t="Les quatre phases">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Quatre phases, du cadrage à l'amplification</h1>
+  <p class="lead">Le dispositif se construit par paliers. À chaque phase, un périmètre réduit, un livrable qui vous appartient, et une décision de passage à la suivante. <span class="hint">cliquez sur une phase pour son livrable</span></p>
+  <div class="grid4">
+    <div class="card dark phasecard"><span class="tag b">Phase 01 · M1</span><h3 style="margin-top:9px;">Cadrer</h3>
+      <ul class="cl" style="font-size:12px;">
+        <li>Ateliers avec SEO et édito, on dessine le flux au tableau</li>
+        <li>Inventaire des accès data et des droits</li>
+        <li>Définition des règles de validation et du RACI</li>
+        <li>Cadre de mesure posé avant de produire</li>
+      </ul>
+      <p class="liv"><b>Livrable</b> : spécification du cockpit et cartographie data</p></div>
+    <div class="card dark phasecard"><span class="tag b">Phase 02 · M2-M3</span><h3 style="margin-top:9px;">Prototyper</h3>
+      <ul class="cl" style="font-size:12px;">
+        <li>POC sur deux territoires B2C et une verticale B2B</li>
+        <li>Connecteurs branchés en préproduction</li>
+        <li>Tests réels des appels API et de leur coût</li>
+        <li>Premiers briefs scorés soumis au comité</li>
+      </ul>
+      <p class="liv"><b>Livrable</b> : cockpit v1 fonctionnel sur périmètre réduit</p></div>
+    <div class="card dark phasecard"><span class="tag b">Phase 03 · M3-M4</span><h3 style="margin-top:9px;">Fiabiliser</h3>
+      <ul class="cl" style="font-size:12px;">
+        <li>Reparamétrage sur vos retours d'usage</li>
+        <li>Bascule des 18 contenus mensuels dans le flux</li>
+        <li>Extension aux verticales restantes</li>
+        <li>Premiers indicateurs de performance lisibles</li>
+      </ul>
+      <p class="liv"><b>Livrable</b> : cockpit en production sur tout le périmètre</p></div>
+    <div class="card dark phasecard"><span class="tag b">Phase 04 · M5-M6</span><h3 style="margin-top:9px;">Amplifier</h3>
+      <ul class="cl" style="font-size:12px;">
+        <li>Montée en volumétrie au rythme de votre back-office</li>
+        <li>Formation de vos équipes à l'outil</li>
+        <li>Transfert de propriété de la stack</li>
+        <li>datashake passe en maintenance et forte valeur ajoutée</li>
+      </ul>
+      <p class="liv"><b>Livrable</b> : autonomie outillée et documentation</p></div>
+  </div>
+  <div class="g-2-1 mt">
+    <div class="card beige"><h3>Le principe du POC restreint</h3><p>On ne branche pas dix connecteurs le premier mois. On en branche deux ou trois sur un périmètre où l'on peut mesurer vite, on constate le coût réel des appels et la qualité de la donnée, puis on étend. C'est ce qui évite le dispositif surdimensionné qui ne sert jamais.</p></div>
+    <div class="card dark"><h3>Une porte de sortie à chaque phase</h3><p>Aucune phase n'engage la suivante. Si le POC démontre qu'un connecteur ne vaut pas son coût, il ne passe pas en production.</p></div>
+  </div>
+</section>
+
+<!-- S6 · CHANTIERS TECHNIQUES -->
+<section class="slide" data-t="Les chantiers techniques">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Les chantiers techniques</h1>
+  <p class="lead">Quatre chantiers, menés en parallèle sur les phases 1 et 2. Chacun a un critère de sortie vérifiable, pas une case cochée. <span class="hint">cliquez sur une ligne pour la mettre en évidence</span></p>
+  <table>
+    <tr><th style="width:44px;">#</th><th style="width:210px;">Chantier</th><th style="width:400px;">Ce qu'on fait</th><th style="width:250px;">Dépendance côté leboncoin</th><th>Critère de sortie</th></tr>
+    <tr class="rowbtn"><td><b>01</b></td><td><b>Accès à la data propriétaire</b></td><td>Cadrer la forme d'accès aux études internes, à la data des annonces et aux trending topics : export programmé, accès à un entrepôt, ou requête à l'équipe data</td><td>Interlocuteur data et validation juridique sur l'usage public des chiffres</td><td>Un jeu de données réel exploité dans un contenu test</td></tr>
+    <tr class="rowbtn"><td><b>02</b></td><td><b>Connecteurs externes</b></td><td>Brancher les sources ouvertes utiles par verticale et les API tierces retenues, avec cache pour maîtriser le coût des appels</td><td>Choix des licences et validation des budgets d'appels</td><td>Rafraîchissement automatique testé sur un cycle complet</td></tr>
+    <tr class="rowbtn"><td><b>03</b></td><td><b>Cockpit et sortie Jira</b></td><td>Backlog, scoring, génération de brief, statuts, et création automatique de la fiche Jira avec structure et sources</td><td>Accès Jira et convention de nommage des tickets</td><td>Une fiche créée de bout en bout sans intervention manuelle</td></tr>
+    <tr class="rowbtn"><td><b>04</b></td><td><b>Cadre de mesure</b></td><td>Définir les indicateurs par type de contenu, brancher les sources de mesure disponibles, produire le reporting qui manque aujourd'hui</td><td>Accès Search Console et arbitrage sur les limites de Piano</td><td>Un tableau de bord qui répond à « ce contenu a-t-il fonctionné »</td></tr>
+  </table>
+  <div class="card dark mt"><p><b>Le point d'attention numéro un, dit franchement.</b> Le chantier 01 est le seul que nous ne pouvons pas mener seuls, et c'est celui qui porte la promesse de différenciation face à l'IA. Sans accès concret et régulier à votre donnée, la content factory reste une belle mécanique alimentée par des sources que vos concurrents ont aussi. C'est le premier sujet à traiter au cadrage.</p></div>
+</section>
+
+<!-- S7 · CHANTIERS ORGA -->
+<section class="slide beige" data-t="Les chantiers d'organisation">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Les chantiers d'organisation</h1>
+  <p class="lead">Un outil ne remplace pas une décision. Le dispositif tient sur un rituel court, des rôles clairs, et le fait que vous gardiez la main éditoriale de bout en bout.</p>
+  <div class="g-1-2">
+    <div class="card dark">
+      <h3>Le comité éditorial</h3>
+      <p style="margin-bottom:9px;"><b>30 minutes, une fois par semaine.</b> Le format tient parce que les sujets arrivent instruits.</p>
+      <ul class="cl" style="font-size:12px;">
+        <li>Revue des sujets scorés au-dessus du seuil</li>
+        <li>Arbitrage des tendances et de l'actualité chaude</li>
+        <li>Validation ou report, avec la raison consignée</li>
+        <li>Point rapide sur les contenus publiés et leurs premiers signaux</li>
+      </ul>
+      <p style="margin-top:10px;font-size:11.5px;">Complété par un point stratégique mensuel et une revue trimestrielle de la stratégie éditoriale.</p>
+    </div>
+    <div>
+      <table>
+        <tr><th style="width:255px;">Qui fait quoi</th><th>leboncoin</th><th>datashake</th></tr>
+        <tr><td>Cibles stratégiques et mots-clés prioritaires</td><td><b>Pilote</b></td><td>Contribue</td></tr>
+        <tr><td>Veille, détection et proposition de sujets</td><td>Contribue</td><td><b>Pilote</b></td></tr>
+        <tr><td>Scoring et priorisation du backlog</td><td>Valide</td><td><b>Pilote</b></td></tr>
+        <tr><td>Arbitrage final des sujets produits</td><td><b>Décide</b></td><td>Recommande</td></tr>
+        <tr><td>Brief, angle, sources et preuve</td><td>Valide</td><td><b>Pilote</b></td></tr>
+        <tr><td>Production éditoriale et optimisation</td><td>Relit</td><td><b>Pilote</b></td></tr>
+        <tr><td>Validation finale et publication</td><td><b>Pilote</b></td><td>Assiste</td></tr>
+        <tr><td>Mesure et lecture de la performance</td><td>Copilote</td><td>Copilote</td></tr>
+        <tr><td>Évolution de l'outil et maintenance</td><td>Valide</td><td><b>Pilote</b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card mt"><p><b>Ce que ça implique pour nous.</b> Vous nous avez dit vouloir être challengés plutôt que servis. Concrètement : nous arrivons en comité avec des sujets que vous n'avez pas demandés, des refus argumentés sur des sujets que vous proposez, et des chiffres pour trancher. C'est le mode de collaboration que nous proposons.</p></div>
+</section>
+
+<!-- S8 · CALENDRIER -->
+<section class="slide" data-t="Le calendrier consolidé">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Le calendrier consolidé</h1>
+  <p class="lead">Six mois pour un dispositif pleinement opérationnel, avec de la production dès le deuxième mois. La montée en charge est progressive, elle suit vos capacités de publication.</p>
+  <div class="frise">
+    <div class="mcol"><div class="m">M1</div>
+      <div class="bar n">Ateliers de cadrage</div>
+      <div class="bar n">Cartographie data</div>
+      <div class="bar n">Cadre de mesure</div>
+      <div class="bar l">Production au rythme actuel</div>
+    </div>
+    <div class="mcol"><div class="m">M2</div>
+      <div class="bar g">Connecteurs en préprod</div>
+      <div class="bar g">Cockpit v1</div>
+      <div class="bar n">Premiers briefs scorés</div>
+      <div class="bar l">Production au rythme actuel</div>
+    </div>
+    <div class="mcol"><div class="m">M3</div>
+      <div class="bar g">POC 2 B2C + 1 B2B</div>
+      <div class="bar g">Tests appels API</div>
+      <div class="bar n">Comité hebdomadaire installé</div>
+      <div class="bar l">Bascule progressive</div>
+    </div>
+    <div class="mcol"><div class="m">M4</div>
+      <div class="bar g">Reparamétrage</div>
+      <div class="bar g">Extension verticales</div>
+      <div class="bar n">Sortie Jira automatisée</div>
+      <div class="bar l">18 contenus dans le flux</div>
+    </div>
+    <div class="mcol"><div class="m">M5</div>
+      <div class="bar g">Moteur de valorisation</div>
+      <div class="bar n">Premiers refresh programmés</div>
+      <div class="bar n">Reporting consolidé</div>
+      <div class="bar l">Montée en volume</div>
+    </div>
+    <div class="mcol"><div class="m">M6</div>
+      <div class="bar g">Formation équipes</div>
+      <div class="bar n">Documentation</div>
+      <div class="bar n">Transfert de propriété</div>
+      <div class="bar l">Autonomie outillée</div>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card"><h3>Ce qui produit dès le M2</h3><p>La production ne s'arrête jamais. Le dispositif se construit à côté du flux existant, puis l'absorbe progressivement à partir du M3.</p></div>
+    <div class="card"><h3>Ce qui dépend de vous</h3><p>Les accès data en M1 et la disponibilité des équipes pour les ateliers conditionnent tout le reste du calendrier.</p></div>
+    <div class="card dark"><h3>Ce qu'on ne promet pas</h3><p>Un dispositif complet au premier septembre. Ce serait faux. Ce qu'on promet, c'est de la production dès le premier mois et une machine qui tient au sixième.</p></div>
+  </div>
+</section>
+
+<!-- S9 · INTERCALAIRE DATA -->
+<section class="slide noir" data-t="La donnée qui alimente la machine">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-White.svg" alt=""><span>confidentiel</span></div>
+  <div class="inter">
+    <div class="kicker">Partie 01 · La donnée</div>
+    <h1>La donnée qui alimente la machine</h1>
+    <p class="sub">Trois étages de données, des API précises, et vos propres chiffres au sommet. C'est ce qui sépare un contenu que l'IA peut recopier d'un contenu que l'IA doit citer.</p>
+    <ol>
+      <li data-go="9"><span>01</span>Les trois étages et leur rôle respectif</li>
+      <li data-go="10"><span>02</span>Votre data propriétaire, verticale par verticale</li>
+      <li data-go="11"><span>03</span>Les jeux de données publics, avec les sources en situation</li>
+      <li data-go="12"><span>04</span>Les API tierces, usage par usage</li>
+      <li data-go="13"><span>05</span>AI Overviews et visibilité IA</li>
+      <li data-go="14"><span>06</span>Volumétrie, coûts et maîtrise de la dépense</li>
+    </ol>
+  </div>
+</section>
+
+<!-- S10 · TROIS ÉTAGES -->
+<section class="slide" data-t="Trois étages de données">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Trois étages de données, trois rôles</h1>
+  <p class="lead">Chaque étage répond à une question différente. Empilés, ils produisent un contenu que ni un concurrent éditorial ni un modèle génératif ne peut fabriquer à votre place.</p>
+  <div class="grid3">
+    <div class="card dark"><span class="tag j">Étage 01</span><h3 style="margin-top:9px;">Votre donnée</h3>
+      <p><b>Question : que dit le marché, vu de chez vous ?</b></p>
+      <ul class="cl mt" style="font-size:12px;">
+        <li>Data des petites annonces : prix, volumes, délais, dispersion géographique</li>
+        <li>Études de l'équipe interne : panels, enquêtes, chiffres exclusifs</li>
+        <li>Trending topics : ce que les gens cherchent chez vous en ce moment</li>
+      </ul>
+      <p class="mt" style="font-size:11.5px;"><b>Rôle</b> : la preuve non réplicable, et la première raison d'être cité par un moteur IA ou repris par un journaliste.</p></div>
+    <div class="card dark"><span class="tag b">Étage 02</span><h3 style="margin-top:9px;">La donnée publique</h3>
+      <p><b>Question : que dit la référence officielle ?</b></p>
+      <ul class="cl mt" style="font-size:12px;">
+        <li>Transactions immobilières réelles, indices notariaux</li>
+        <li>Réglementation, fiscalité, dispositifs en vigueur</li>
+        <li>Statistiques nationales par territoire et par marché</li>
+      </ul>
+      <p class="mt" style="font-size:11.5px;"><b>Rôle</b> : la caution factuelle. Elle crédibilise votre chiffre en le replaçant dans un référentiel que personne ne conteste.</p></div>
+    <div class="card dark"><span class="tag k">Étage 03</span><h3 style="margin-top:9px;">La donnée de recherche</h3>
+      <p><b>Question : que cherchent les gens, et qui répond déjà ?</b></p>
+      <ul class="cl mt" style="font-size:12px;">
+        <li>Volumes, tendances, questions associées</li>
+        <li>Composition réelle des pages de résultats</li>
+        <li>Visibilité dans les moteurs IA et les AI Overviews</li>
+      </ul>
+      <p class="mt" style="font-size:11.5px;"><b>Rôle</b> : le ciblage et la mesure. Elle décide quoi produire et permet de dire si ça a marché.</p></div>
+  </div>
+  <div class="card beige mt"><p><b>La règle que nous appliquons.</b> Un contenu qui ne mobilise que l'étage 03 est un contenu que n'importe qui peut écrire, y compris une IA. Un contenu qui combine les trois étages devient une source. C'est ce croisement, et pas le volume de production, qui fait la différence sur les requêtes stratégiques que vous visez.</p></div>
+</section>
+
+<!-- S11 · DATA PROPRIÉTAIRE PAR VERTICALE (onglets) -->
+<section class="slide beige" data-t="Votre data propriétaire">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Votre data propriétaire, verticale par verticale</h1>
+  <p class="lead" style="margin-bottom:12px;">Voici ce que nous chercherions à mobiliser, marché par marché. Le détail est à confirmer au cadrage selon ce qui est réellement extractible et publiable. <span class="hint">naviguez par verticale</span></p>
+  <div class="tabs" id="vertTabs">
+    <button data-p="immo" aria-pressed="true">Immobilier</button>
+    <button data-p="auto" aria-pressed="false">Auto</button>
+    <button data-p="conso" aria-pressed="false">Maison et consommation</button>
+    <button data-p="b2b" aria-pressed="false">B2B tous marchés</button>
+  </div>
+  <div class="tabpane on" data-pane="immo">
+    <div class="g-2-1">
+      <div>
+        <div class="card"><h3>Donnée mobilisable</h3>
+          <ul class="cl" style="font-size:12.5px;">
+            <li>Prix demandés au m² par ville et par quartier, à une granularité que les portails spécialisés ne publient pas</li>
+            <li>Délais de mise en ligne et évolution du stock d'annonces</li>
+            <li>Part maison contre appartement, tension par territoire</li>
+          </ul></div>
+        <div class="card mt"><h3>Ce qu'on en tire éditorialement</h3><p style="font-size:12.5px;">Baromètres territoriaux, cartes de tension, analyses d'évolution. L'angle signature : <b>l'écart entre prix affiché et prix réellement signé</b>, croisé avec la base DVF. Un chiffre que vous seuls pouvez produire, qui intéresse autant l'acheteur que la presse.</p></div>
+      </div>
+      <div class="card dark"><h3>Format cible</h3>
+        <ul class="cl" style="font-size:12px;">
+          <li>Baromètre trimestriel national</li>
+          <li>Déclinaisons par territoire quand le volume le justifie</li>
+          <li>Pages par ville maillées vers vos listings</li>
+        </ul>
+        <p class="mt" style="font-size:11.5px;"><b>Concurrent frontal</b> : SeLoger. Sa force est le prix affiché. Votre angle est l'écart au prix signé, qu'il ne peut pas produire sans vos volumes.</p></div>
+    </div>
+  </div>
+  <div class="tabpane" data-pane="auto">
+    <div class="g-2-1">
+      <div>
+        <div class="card"><h3>Donnée mobilisable</h3>
+          <ul class="cl" style="font-size:12.5px;">
+            <li>Cotes réelles pratiquées par modèle et par millésime, kilométrages moyens</li>
+            <li>Motorisations qui se vendent réellement, par département</li>
+            <li>Saisonnalité du marché de l'occasion</li>
+          </ul></div>
+        <div class="card mt"><h3>Ce qu'on en tire éditorialement</h3><p style="font-size:12.5px;">Guides d'achat chiffrés et analyses de décote fondés sur des prix réels, pas des estimations d'expert. <b>La décote réelle constatée sur vos annonces, modèle par modèle</b>, croisée aux immatriculations officielles.</p></div>
+      </div>
+      <div class="card dark"><h3>Format cible</h3>
+        <ul class="cl" style="font-size:12px;">
+          <li>Guide par modèle, rafraîchi à la cote</li>
+          <li>Baromètre décote trimestriel</li>
+          <li>Analyses de bascule de motorisation</li>
+        </ul>
+        <p class="mt" style="font-size:11.5px;"><b>Concurrent frontal</b> : La Centrale. Un arbitrage assumé : le créneau « garage plus ville » relève du local et du programmatique, on le traite côté B2B, pas frontalement en B2C.</p></div>
+    </div>
+  </div>
+  <div class="tabpane" data-pane="conso">
+    <div class="g-2-1">
+      <div>
+        <div class="card"><h3>Donnée mobilisable</h3>
+          <ul class="cl" style="font-size:12.5px;">
+            <li>Catégories en croissance et prix moyens du seconde main par famille de produits</li>
+            <li>Comportement de revente selon la saison</li>
+            <li>Vos trending topics : ce que la France cherche chez vous cette semaine</li>
+          </ul></div>
+        <div class="card mt"><h3>Ce qu'on en tire éditorialement</h3><p style="font-size:12.5px;">L'inspiration adossée au chiffre : <b>combien coûte réellement d'équiper une pièce en seconde main</b>, quand acheter, quand revendre. Le contenu déco devient utile et chiffré, au lieu de rester générique.</p></div>
+      </div>
+      <div class="card dark"><h3>Format cible</h3>
+        <ul class="cl" style="font-size:12px;">
+          <li>Tendances saisonnières récurrentes</li>
+          <li>Guides d'achat malin</li>
+          <li>Analyses de consommation reprises par la presse</li>
+        </ul>
+        <p class="mt" style="font-size:11.5px;"><b>Concurrent cité</b> : Vinted. Votre différence : la largeur des catégories (maison, électroménager, jardin) là où Vinted reste mode et accessoires.</p></div>
+    </div>
+  </div>
+  <div class="tabpane" data-pane="b2b">
+    <div class="g-2-1">
+      <div>
+        <div class="card"><h3>Donnée mobilisable</h3>
+          <ul class="cl" style="font-size:12.5px;">
+            <li>Volumes d'annonces professionnelles, dynamique par région et par secteur</li>
+            <li>Comportements des acheteurs professionnels</li>
+            <li>Sirene pour dimensionner chaque marché local</li>
+          </ul></div>
+        <div class="card mt"><h3>Ce qu'on en tire éditorialement</h3><p style="font-size:12.5px;">Observatoires de marché à destination des pros, matière de prospection pour les commerciaux, contenu que la presse professionnelle reprend. <b>Le potentiel le moins exploité</b> : personne n'a pris la place de source de référence B2B sur vos verticales.</p></div>
+      </div>
+      <div class="card dark"><h3>Format cible</h3>
+        <ul class="cl" style="font-size:12px;">
+          <li>Observatoire trimestriel par verticale</li>
+          <li>Livre blanc téléchargeable, générateur de leads</li>
+          <li>Infographies activables par les commerciaux</li>
+        </ul>
+        <p class="mt" style="font-size:11.5px;"><b>Objectif</b> : installer leboncoin en partenaire business, pas seulement en lieu de transaction. Six contenus par mois, forte valeur unitaire.</p></div>
+    </div>
+  </div>
+  <div class="card mt"><p><b>Les trois questions à trancher au cadrage</b> : la forme d'accès (export programmé, entrepôt, ou demande à l'équipe data), la fraîcheur (temps réel, mensuel, trimestriel, elle conditionne le rythme de publication), et la validation (qui autorise la publication d'un chiffre issu de vos annonces).</p></div>
+</section>
+
+<!-- S12 · DONNÉES PUBLIQUES + CAPTURES -->
+<section class="slide" data-t="Les jeux de données publics">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Les jeux de données publics mobilisables</h1>
+  <p class="lead" style="margin-bottom:12px;">Gratuits, officiels, actualisés et citables. Ils servent de référentiel pour contextualiser vos chiffres et pour traiter les sujets réglementaires que vos audiences recherchent. <span class="hint">cliquez sur une capture pour zoomer</span></p>
+  <div class="g-2-1">
+    <div>
+      <table class="compact">
+        <tr><th style="width:190px;">Source</th><th style="width:110px;">Producteur</th><th style="width:110px;">Verticale</th><th>Usage éditorial type</th></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-datagouv.ico" alt=""><b>DVF, valeurs foncières</b></td><td>DGFiP, data.gouv</td><td>Immobilier</td><td>Confronter prix demandés et prix réellement signés</td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-insee.ico" alt=""><b>Indices notariaux</b></td><td>Notaires, INSEE</td><td>Immobilier</td><td>Situer une tendance locale dans le mouvement national</td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-ademe.ico" alt=""><b>Base des DPE</b></td><td>ADEME</td><td>Immobilier</td><td>Passoires thermiques, valeur verte, obligations de location</td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-insee.ico" alt=""><b>BAN et INSEE</b></td><td>IGN, INSEE</td><td>Immo, auto</td><td>Contextualiser un chiffre local, comparer des territoires</td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-datagouv.ico" alt=""><b>Immatriculations</b></td><td>Min. Transports</td><td>Auto</td><td>Marché réel de l'occasion, bascules de motorisation</td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-insee.ico" alt=""><b>Sirene</b></td><td>INSEE</td><td>B2B</td><td>Dimensionner un marché professionnel local</td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-legifrance.ico" alt=""><b>Textes officiels</b></td><td>Légifrance</td><td>Immo, auto</td><td>Actualité juridique et fiscale avec la source primaire</td></tr>
+      </table>
+      <div class="card dark mt"><p style="font-size:12px;"><b>Pourquoi c'est stratégique en GEO.</b> Les moteurs génératifs privilégient les contenus qui citent des sources primaires vérifiables. Un contenu qui croise votre chiffre propriétaire avec la référence officielle coche les deux critères qui déclenchent la citation : l'exclusivité de la donnée et la traçabilité de la source.</p></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <figure class="shot" style="height:250px;" data-full="assets/captures/dvf-explorateur.png" data-cap="Explorateur DVF (data.gouv.fr) : 4,49 millions de ventes réelles, prix médian au m² par commune. La donnée qu'on croise avec vos prix affichés.">
+        <img src="assets/captures/dvf-explorateur.png" alt="Explorateur DVF">
+        <figcaption class="cap">DVF : 4,49 M de ventes réelles, prix signés par commune</figcaption>
+      </figure>
+      <div style="display:flex;gap:10px;">
+        <figure class="shot" style="height:130px;flex:1;" data-full="assets/captures/ademe-dpe.png" data-cap="Base ADEME des DPE : 15,2 millions de diagnostics, mise à jour chaque semaine, licence ouverte.">
+          <img src="assets/captures/ademe-dpe.png" alt="Base DPE ADEME">
+          <figcaption class="cap">ADEME : 15,2 M de DPE</figcaption>
+        </figure>
+        <figure class="shot" style="height:130px;flex:1;" data-full="assets/captures/datagouv-dvf-dataset.png" data-cap="La fiche du jeu de données DVF sur data.gouv.fr : open data officiel DGFiP, mis à jour semestriellement.">
+          <img src="assets/captures/datagouv-dvf-dataset.png" alt="data.gouv DVF">
+          <figcaption class="cap">data.gouv.fr : le jeu DVF officiel</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <p class="src">Captures réelles, juillet 2026 : explorateur DVF et fiche data.gouv.fr (DGFiP), base DPE (data.ademe.fr).</p>
+</section>
+
+<!-- S13 · API TIERCES -->
+<section class="slide" data-t="Les API tierces">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Les API tierces, usage par usage</h1>
+  <p class="lead" style="margin-bottom:12px;">Le principe : une API n'entre dans la stack que si elle alimente une décision ou un contenu. Vous détenez les licences, nous les exploitons. <span class="hint">cliquez sur les captures pour zoomer</span></p>
+  <div class="g-2-1">
+    <div>
+      <table class="compact">
+        <tr><th style="width:165px;">Brique</th><th style="width:250px;">Ce qu'elle apporte</th><th style="width:250px;">Où elle sert dans le cockpit</th><th>Priorité</th></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-dataforseo.ico" alt=""><b>DataForSEO</b><br><span style="color:var(--ink50);font-size:10.5px;">SERP, Labs, On-Page</span></td><td>Résultats de recherche à la demande, volumes, questions associées, analyse des pages positionnées, relevé des AI Overviews dans la SERP</td><td>Instruction des sujets, scrape du top 3, détection des formats concurrents, calcul du score</td><td><span class="tag">Phase 1</span></td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-semrush.ico" alt=""><b>Suivi de position</b></td><td>Suivi quotidien des positions sur un parc de requêtes</td><td>Mesure de l'effet des contenus, détection des pertes. Vous avez déjà Yooda et SEMrush : on branche l'existant</td><td><span class="tag">Phase 1</span></td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-gsc.ico" alt=""><b>Search Console</b></td><td>Impressions, clics, requêtes réelles, y compris le rapport dédié aux AI Overviews</td><td>Détection des contenus en perte, sujets à rafraîchir, mesure de l'exposition IA. Gratuit, déjà en place</td><td><span class="tag">Phase 1</span></td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-perplexity.ico" alt=""><b>Visibilité IA</b></td><td>Présence de la marque dans les réponses de ChatGPT, Perplexity, Gemini, sur un panel de prompts</td><td>Mesure GEO, détection des sources citées à votre place. À articuler avec votre démarche en cours</td><td><span class="tag">Phase 2</span></td></tr>
+        <tr><td><span class="logo16" style="display:inline-block;background:var(--noir);border-radius:3px;"></span><b>API métier verticales</b></td><td>Cotes automobiles, taux de crédit, indices sectoriels selon les besoins</td><td>Alimentation des contenus chiffrés et des baromètres à rotation</td><td><span class="tag gris">Phase 2-3</span></td></tr>
+        <tr><td><img class="logo16" src="assets/logos/fav-anthropic.ico" alt=""><b>Modèles de langage</b></td><td>Génération assistée des briefs, structuration, aide à la rédaction</td><td>Toute la chaîne d'instruction et de production, validation humaine systématique</td><td><span class="tag">Phase 1</span></td></tr>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <figure class="shot" style="height:196px;" data-full="assets/captures/dataforseo-serp-api.png" data-cap="DataForSEO SERP API : la SERP complète en JSON à la demande, AI Overviews compris. Le socle de l'instruction automatique des sujets.">
+        <img src="assets/captures/dataforseo-serp-api.png" alt="DataForSEO SERP API">
+        <figcaption class="cap">DataForSEO : la SERP en JSON, socle de l'instruction</figcaption>
+      </figure>
+      <figure class="shot" style="height:196px;" data-full="assets/captures/semrush-lbc.png" data-cap="SEMrush, vue leboncoin.fr : 47,3 M de trafic organique estimé, 2,8 M de mots-clés, et déjà un bloc Recherche IA. Votre licence existante s'intègre au cockpit.">
+        <img src="assets/captures/semrush-lbc.png" alt="SEMrush leboncoin.fr">
+        <figcaption class="cap">SEMrush sur leboncoin.fr : l'existant, branché tel quel</figcaption>
+      </figure>
+      <div class="card dark" style="padding:11px 14px;"><p style="font-size:11.5px;"><b>Qui paie quoi.</b> Licences et appels restent à votre charge, conformément à votre cadrage. Nous dimensionnons, nous exploitons : vous gardez la main sur le contrat et le budget.</p></div>
+    </div>
+  </div>
+  <p class="src">Captures réelles, juillet 2026 : dataforseo.com et SEMrush (vue d'ensemble du domaine leboncoin.fr, base FR).</p>
+</section>
+
+<!-- S14 · AI OVERVIEWS -->
+<section class="slide beige" data-t="AI Overviews et visibilité IA">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>AI Overviews et visibilité IA, intégrées au dispositif</h1>
+  <p class="lead" style="margin-bottom:12px;">Les AI Overviews ne sont pas un sujet à part : ils entrent dans le scoring, dans le format des contenus et dans la mesure. Trois mécanismes concrets.</p>
+  <div class="grid3">
+    <div class="card">
+      <span class="tag bl">01 · Dans le scoring</span>
+      <h3 style="margin-top:9px;">L'exposition AIO est un critère</h3>
+      <p style="font-size:12px;margin-bottom:8px;">Chaque requête instruite est marquée : déclenche-t-elle un AI Overview, et est-il stable dans le temps ? Une SERP sans AIO est un trafic protégé, proche conversion. Une SERP avec AIO se joue autrement : il faut être la source citée.</p>
+      <div class="aio">
+        <div class="aio-h"><span class="spark"></span>AI Overview <span style="font-weight:400;color:var(--ink50);">· requête « passoire thermique location 2026 »</span></div>
+        <p>Depuis le 1er janvier 2025, les logements classés G au DPE ne peuvent plus être mis en location. L'interdiction s'étendra aux logements classés F en 2028...</p>
+        <div class="aio-srcs"><span>service-public.fr</span><span>ademe.fr</span><span class="lbc">leboncoin.fr ← l'objectif</span></div>
+      </div>
+      <p style="font-size:10.5px;color:var(--ink50);margin-top:6px;">Reconstitution illustrative d'un AI Overview. Le relevé réel est industrialisé via l'API SERP.</p>
+    </div>
+    <div class="card">
+      <span class="tag ja">02 · Dans le format</span>
+      <h3 style="margin-top:9px;">Écrire pour être cité</h3>
+      <ul class="cl" style="font-size:12px;">
+        <li><b>Bloc à retenir</b> en tête d'article : la synthèse que les moteurs IA extraient en priorité</li>
+        <li><b>Tableaux de données sourcés</b> : le format le plus repris par les réponses génératives</li>
+        <li><b>Chiffre exclusif + source officielle</b> : le croisement qui force l'attribution à leboncoin</li>
+        <li><b>Données structurées</b> dès que votre CMS les portera</li>
+      </ul>
+      <p style="font-size:12px;margin-top:9px;">Et un levier souvent oublié : <b>les sources que les moteurs citent déjà</b>. Sur vos thématiques, Reddit et les forums pèsent lourd dans les réponses IA. Les baromètres publiés donnent une raison naturelle d'y être mentionné.</p>
+    </div>
+    <div class="card">
+      <span class="tag ka">03 · Dans la mesure</span>
+      <h3 style="margin-top:9px;">Suivre l'exposition, pas la subir</h3>
+      <ul class="cl" style="font-size:12px;">
+        <li><b>Rapport AIO de la Search Console</b> : le rapport dédié isole les impressions et clics issus des réponses génératives de Google</li>
+        <li><b>Suivi de visibilité IA</b> sur un panel de prompts : présence de la marque dans ChatGPT, Perplexity, Gemini</li>
+        <li><b>Citations obtenues</b> : quels contenus sont repris, par quels moteurs, avec quelle attribution</li>
+      </ul>
+      <figure class="shot mt" style="height:132px;" data-full="assets/captures/semrush-lbc-ia.png" data-cap="SEMrush, leboncoin.fr : le suivi distingue déjà les positions organiques des Aperçus IA, et liste les sources les plus citées sur votre univers (leboncoin.fr 24,6K mentions, reddit.com 12,7K). La mesure existe, on l'industrialise.">
+        <img src="assets/captures/semrush-lbc-ia.png" alt="SEMrush recherche IA leboncoin" style="object-position:center 30%;">
+        <figcaption class="cap">Positions vs Aperçu IA, sources citées : reddit.com déjà 2e</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="card dark mt"><p style="font-size:12px;"><b>La ligne directrice.</b> Sur les requêtes exposées aux AI Overviews, l'objectif n'est plus seulement la position, c'est la citation. Un contenu qui publie un chiffre que personne d'autre ne détient, sourcé et structuré, est exactement ce que les moteurs génératifs reprennent et attribuent. Votre data propriétaire est votre meilleure assurance GEO.</p></div>
+</section>
+
+<!-- S15 · VOLUMÉTRIE ET COÛTS -->
+<section class="slide" data-t="Volumétrie et coûts">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Volumétrie, coûts et maîtrise de la dépense</h1>
+  <p class="lead">Les licences et les appels sont à votre charge. Notre rôle est de les dimensionner honnêtement et de faire en sorte qu'ils ne dérivent pas. Voici comment nous les maîtrisons.</p>
+  <div class="grid2">
+    <div class="card dark">
+      <h3>Les deux postes qui peuvent déraper</h3>
+      <ul class="cl" style="font-size:12.5px;">
+        <li><b>Les appels aux API de recherche.</b> Un scrape du top 10 par sujet instruit, multiplié par un backlog de plusieurs dizaines de sujets et par les suivis quotidiens, monte vite si rien n'est cadré.</li>
+        <li><b>Les modèles de langage.</b> C'est le poste le plus variable : il dépend du volume de briefs générés et de la longueur des contenus traités.</li>
+      </ul>
+      <h3 class="mt">Les quatre garde-fous que nous posons</h3>
+      <ul class="cl" style="font-size:12.5px;">
+        <li><b>Cache systématique</b> : une requête instruite n'est pas réinterrogée avant son délai de péremption</li>
+        <li><b>Instruction à la demande</b> : on n'instruit que les sujets qui passent le premier filtre de score, pas tout le backlog</li>
+        <li><b>Plafond mensuel</b> par source, avec alerte avant dépassement</li>
+        <li><b>Reporting de consommation</b> présenté au comité, au même titre que la performance éditoriale</li>
+      </ul>
+    </div>
+    <div>
+      <div class="card"><h3>Ce qui est dimensionné au POC</h3><p>Le coût réel des appels ne s'estime pas sur un tableur, il se constate. La phase 2 sert précisément à ça : mesurer la consommation réelle sur un périmètre restreint, puis extrapoler avec une marge de sécurité avant d'étendre.</p></div>
+      <div class="card mt"><h3>L'arbitrage coût contre valeur</h3><p>Certains contenus justifient une instruction lourde : un baromètre trimestriel qui vivra trois mois et sera cité par la presse. D'autres non : une question fréquente à faible enjeu. Le score sert aussi à ça, décider du niveau d'instruction que mérite un sujet.</p></div>
+      <div class="card beige mt"><h3>Ce que nous savons déjà</h3><p>Sur des dispositifs comparables, la dépense en outillage et en appels reste très inférieure au coût du temps humain qu'elle remplace. C'est la comparaison que nous vous proposons de suivre, mois après mois, plutôt que de regarder la ligne API isolément.</p></div>
+    </div>
+  </div>
+  <p class="src">Les ordres de grandeur précis seront chiffrés en phase de cadrage, une fois arrêtés le périmètre de sources et le volume de sujets instruits par mois.</p>
+</section>
+
+</div>
+
+<!-- chrome -->
+<div id="deckbar">
+  <button id="btnPrev" aria-label="Précédent">&#8592;</button>
+  <button id="btnNext" aria-label="Suivant">&#8594;</button>
+  <span id="counter">1 / 15</span>
+  <div id="prog"><i></i></div>
+  <span class="kbd">flèches pour naviguer · S sommaire · clic sur les captures pour zoomer</span>
+  <button id="btnToc">Sommaire</button>
+</div>
+<div id="toc"><h2>Sommaire</h2><ol id="tocList"></ol></div>
+<div class="lightbox" id="lightbox"><img src="" alt=""><div class="lcap"></div></div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var cur=0;
+  var stage=document.getElementById('stage');
+
+  function fit(){
+    var s=Math.min(window.innerWidth/1280,(window.innerHeight-44)/720);
+    stage.style.transform='translateX(-50%) scale('+s+')';
+    stage.style.top=Math.max(0,((window.innerHeight-44)-720*s)/2)+'px';
+  }
+  window.addEventListener('resize',fit);fit();
+
+  function go(i){
+    if(i<0||i>=slides.length)return;
+    slides[cur].classList.remove('on');
+    cur=i;slides[cur].classList.add('on');
+    document.getElementById('counter').textContent=(cur+1)+' / '+slides.length;
+    document.querySelector('#prog i').style.width=((cur+1)/slides.length*100)+'%';
+    location.hash='s'+(cur+1);
+  }
+  document.getElementById('btnPrev').onclick=function(){go(cur-1)};
+  document.getElementById('btnNext').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(cur+1);}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+    if(e.key.toLowerCase()==='s'){toggleToc();}
+    if(e.key==='Escape'){document.getElementById('toc').classList.remove('open');lb.classList.remove('open');}
+  });
+
+  // sommaire
+  var tocList=document.getElementById('tocList');
+  slides.forEach(function(sl,i){
+    var li=document.createElement('li');
+    li.innerHTML='<span>'+String(i+1).padStart(2,'0')+'</span>'+sl.getAttribute('data-t');
+    li.onclick=function(){go(i);document.getElementById('toc').classList.remove('open');};
+    tocList.appendChild(li);
+  });
+  function toggleToc(){document.getElementById('toc').classList.toggle('open');}
+  document.getElementById('btnToc').onclick=toggleToc;
+
+  // liens des intercalaires
+  [].slice.call(document.querySelectorAll('[data-go]')).forEach(function(el){
+    el.addEventListener('click',function(){go(parseInt(el.getAttribute('data-go'),10));});
+  });
+
+  // hash initial
+  var m=location.hash.match(/^#s(\d+)$/);
+  if(m){var i=parseInt(m[1],10)-1;if(i>0&&i<slides.length){slides[0].classList.remove('on');cur=i;slides[cur].classList.add('on');}}
+  document.getElementById('counter').textContent=(cur+1)+' / '+slides.length;
+  document.querySelector('#prog i').style.width=((cur+1)/slides.length*100)+'%';
+
+  // lightbox
+  var lb=document.getElementById('lightbox');
+  [].slice.call(document.querySelectorAll('.shot')).forEach(function(f){
+    f.addEventListener('click',function(){
+      lb.querySelector('img').src=f.getAttribute('data-full');
+      lb.querySelector('.lcap').textContent=f.getAttribute('data-cap')||'';
+      lb.classList.add('open');
+    });
+  });
+  lb.addEventListener('click',function(){lb.classList.remove('open');});
+
+  // S2 : bascule avant / après
+  var swA=document.getElementById('swAvant');
+  swA.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].slice.call(swA.querySelectorAll('button')).forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    var v=b.getAttribute('data-v');
+    [].slice.call(document.querySelectorAll('#tblChange .c-auj')).forEach(function(c){c.style.display=(v==='cf')?'none':'';});
+    [].slice.call(document.querySelectorAll('#tblChange .c-cf')).forEach(function(c){c.style.display=(v==='auj')?'none':'';});
+  });
+
+  // S3 : modules cliquables
+  var modDefault=document.getElementById('modDetail').innerHTML;
+  [].slice.call(document.querySelectorAll('.mod-list li')).forEach(function(li){
+    li.addEventListener('click',function(){
+      var sel=li.classList.contains('sel');
+      [].slice.call(document.querySelectorAll('.mod-list li')).forEach(function(x){x.classList.remove('sel');x.style.outline='';});
+      var box=document.getElementById('modDetail');
+      if(sel){box.innerHTML=modDefault;return;}
+      li.classList.add('sel');li.style.outline='1px solid var(--bleu)';li.style.borderRadius='4px';
+      box.innerHTML='<p><b>'+li.querySelector('b').textContent+'.</b> '+li.getAttribute('data-d')+'</p>';
+    });
+  });
+
+  // S4 : workflow
+  var STEPS=[
+    {n:1,nm:"Backlog et captation",side:"machine",accel:"réservoir toujours plein",base:"Un registre unique de sujets pré-qualifiés, alimenté par vos SEO (le quoi) et par notre veille. Deux mois d'avance : vous piochez, vous ne cherchez pas.",auj:"Veille sur sources publiques et vos cibles SEO.",fin:"La donnée des annonces et les études internes alimentent le backlog en continu."},
+    {n:2,nm:"Comité et pioche",side:"humain",accel:null,base:"Comité hebdomadaire court avec SEO et édito : tendances, requêtes prioritaires, arbitrage. Vous décidez le quoi.",auj:"Backlog priorisé avec vous, en comité.",fin:"Même rituel, signaux data élargis."},
+    {n:3,nm:"Brief-contrat",side:"mixte",accel:"pré-brief outillé",base:"Brief pré-rempli à 70 % par la machine, finalisé par le consultant, validé par vos SEO en un passage. Un brief validé ne se rediscute plus.",auj:"Pré-brief sur nos outils et les vôtres (Yooda, SEMrush).",fin:"Pré-brief nourri de la data annonces et des études."},
+    {n:4,nm:"Preuve (J-30)",side:"mixte",accel:"collecte découplée",base:"La matière non régénérable (chiffre exclusif, étude, citation) se sécurise en avance. Règle dure : pas de preuve, on permute, jamais de générique.",auj:"Études internes, data publique, terrain.",fin:"Accès élargi annonces et équipe Études : preuve systématique."},
+    {n:5,nm:"Rédaction experte",side:"humain",accel:null,base:"Rédacteurs spécialisés par verticale, interviews comprises. L'IA aide à couvrir, la plume reste humaine. Risque spam maîtrisé.",auj:"Standards de citabilité calibrés sur le back-office actuel.",fin:"Formats courts déblocables : vous les produisez en interne, l'agence garde la forte valeur."},
+    {n:6,nm:"Visa de conformité",side:"mixte",accel:"protège vos relectures",base:"Avant de vous parvenir, chaque texte est confronté à son brief. La machine vérifie le contrat, l'humain juge le texte.",auj:"Contrôle systématique côté agence : vous validez, vous ne corrigez pas.",fin:"Contrôle de balisage Schema quand le CMS le portera."},
+    {n:7,nm:"Validation",side:"humain",accel:"lissage et relances",base:"Vos allers-retours portent sur un texte déjà conforme. Livraison lissée, relances automatiques, charge mesurée à la baisse.",auj:"Relecture en document commenté, créneaux batchés.",fin:"Intégrable à votre nouvel outil de publication."},
+    {n:8,nm:"Publication",side:"humain",accel:"package prêt à coller",base:"Le cœur de la modularité. Le package se reconfigure dès que votre outil interne est prêt.",auj:"Package prêt à coller champ par champ, préparation des images automatisée.",fin:"Nouvel outil : formats courts, visuels intégrés, temps de publication effondré."},
+    {n:9,nm:"Mesure et boucle",side:"mixte",accel:"baseline et critère",base:"Baseline avant le premier contenu, critère de succès au brief : on répond à « est-ce que ça marche ». La couverture d'abord.",auj:"Articulé avec Piano Analytics et le rapport AIO de la Search Console.",fin:"Data élargie : contribution aux pages de listing mesurée finement."}
+  ];
+  var BACKLOG=[
+    {t:"Fiabilité par modèle : les pannes connues",r:"Auto",sc:87},
+    {t:"DPE 2027 : ce qui change pour les bailleurs",r:"Immo",sc:84},
+    {t:"Baromètre prix, édition pro",r:"B2B",sc:81},
+    {t:"Bien vendre son électroménager d'occasion",r:"Conso",sc:74},
+    {t:"Estimer son bien avant de vendre",r:"Immo",sc:72},
+    {t:"Leasing électrique : à vérifier avant de signer",r:"Auto",sc:70}
+  ];
+  var CAP={auj:"Back-office actuel : saisie champ par champ, images à la main. Le dispositif tourne dans ces contraintes, sans rien attendre.",
+           fin:"Votre nouvel outil de publication porte les formats courts, l'accès data s'élargit. Même colonne vertébrale, nouvelles capacités, rien à reconstruire."};
+  var etat='auj';
+  document.getElementById('wfBacklog').innerHTML='<div class="bcard" style="flex:0 0 148px;background:var(--noir);border-color:var(--noir);"><div class="bt" style="color:#fff;font-family:\'Season Sans\',sans-serif;font-weight:400;">Le backlog vivant</div><div class="bm"><span class="chip" style="background:var(--jaune);border-color:var(--jaune);color:var(--noir);">vous piochez</span></div></div>'+BACKLOG.map(function(b){return '<div class="bcard"><div class="bt">'+b.t+'</div><div class="bm"><span class="chip">'+b.r+'</span><span class="chip sc">score '+b.sc+'</span></div></div>';}).join('');
+  var spine=document.getElementById('wfSpine');
+  STEPS.forEach(function(s,i){
+    var w=document.createElement('div');w.className='wfstep';
+    w.innerHTML='<button class="wfbtn" data-side="'+s.side+'"><span class="wn">0'+s.n+'</span><span class="wnm">'+s.nm+'</span><span class="who '+s.side+'">'+(s.side==='machine'?'machine':s.side==='humain'?'humain':'mixte')+'</span></button>';
+    w.querySelector('button').addEventListener('click',function(){selStep(i);});
+    spine.appendChild(w);
+  });
+  function renderDetail(i){
+    var s=STEPS[i];
+    var accel=s.accel?'<div class="cell accel"><b>Levier d\'accélération</b>'+s.accel+'</div>':'<div class="cell"><b>Levier d\'accélération</b>L\'humain pilote cette étape : c\'est voulu.</div>';
+    document.getElementById('wfDetail').innerHTML='<h3>0'+s.n+' · '+s.nm+'</h3><p class="base">'+s.base+'</p>'+
+      '<div class="cells"><div class="cell'+(etat==='auj'?' hlA':'')+'"><b>Aujourd\'hui</b>'+s.auj+'</div>'+
+      '<div class="cell'+(etat==='fin'?' hlB':'')+'"><b>Fin d\'année</b>'+s.fin+'</div>'+accel+'</div>';
+  }
+  var curStep=0;
+  function selStep(i){
+    curStep=i;
+    [].slice.call(spine.querySelectorAll('.wfbtn')).forEach(function(b,j){b.classList.toggle('sel',j===i);});
+    renderDetail(i);
+  }
+  function setEtat(e){
+    etat=e;
+    document.getElementById('etatCaption').textContent=CAP[e];
+    var sw=document.getElementById('swEtat');
+    [].slice.call(sw.querySelectorAll('button')).forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-e')===e?'true':'false');});
+    renderDetail(curStep);
+  }
+  document.getElementById('swEtat').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(b)setEtat(b.getAttribute('data-e'));
+  });
+  setEtat('auj');selStep(0);
+
+  // S5 : phases
+  [].slice.call(document.querySelectorAll('.phasecard')).forEach(function(c){
+    c.addEventListener('click',function(){c.classList.toggle('open');});
+  });
+
+  // S6 : lignes cliquables
+  [].slice.call(document.querySelectorAll('tr.rowbtn')).forEach(function(r){
+    r.addEventListener('click',function(){
+      var was=r.classList.contains('sel');
+      [].slice.call(r.closest('table').querySelectorAll('tr.rowbtn')).forEach(function(x){x.classList.remove('sel');});
+      if(!was)r.classList.add('sel');
+    });
+  });
+
+  // S8 : mois sélectionnables
+  [].slice.call(document.querySelectorAll('.frise .mcol')).forEach(function(mc){
+    mc.addEventListener('click',function(){
+      var was=mc.classList.contains('sel');
+      [].slice.call(document.querySelectorAll('.frise .mcol')).forEach(function(x){x.classList.remove('sel');});
+      if(!was)mc.classList.add('sel');
+    });
+  });
+
+  // S11 : onglets verticales
+  var vt=document.getElementById('vertTabs');
+  vt.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].slice.call(vt.querySelectorAll('button')).forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    var p=b.getAttribute('data-p');
+    [].slice.call(document.querySelectorAll('.tabpane')).forEach(function(x){x.classList.toggle('on',x.getAttribute('data-pane')===p);});
+  });
+})();
+</script>
+</body>
+</html>
