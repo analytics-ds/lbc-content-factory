@@ -639,7 +639,14 @@ setTimeout(function(){
     if(btn) btn.click();
   }
   if(parts[0]==="cockpit" && parts[1]){
-    try{ showTable(parts[1]); }catch(e){}
+    if(parts[1]==="fiche"||parts[1]==="ticket"){
+      var kw=decodeURIComponent(parts[2]||(parts[1]==="fiche"?"vide-grenier":"formats publicitaires")).toLowerCase().replace(/-/g," ");
+      var rec=null;
+      for(var ri=0;ri<RECS.length;ri++){ if((RECS[ri].t||"").toLowerCase().indexOf(kw)>-1 || (RECS[ri].kw||"").toLowerCase().indexOf(kw)>-1){ rec=RECS[ri]; break; } }
+      if(rec){ if(parts[1]==="fiche"){ openFiche(rec); } else { openTicket(rec); } }
+    } else {
+      try{ showTable(parts[1]); }catch(e){}
+    }
   }
 },0);
 
