@@ -234,10 +234,10 @@
     <ol id="tocCover">
       <li data-go="1"><span>01</span>Ce que la content factory change concrètement</li>
       <li data-go="2"><span>02</span>L'anatomie du cockpit : machinerie et valorisation</li>
-      <li data-go="3"><span>03</span>Le workflow déroulé, étape par étape</li>
-      <li data-go="4"><span>04</span>Les quatre phases, les chantiers, le calendrier</li>
-      <li data-go="8"><span>05</span>La donnée qui alimente la machine : data interne, sources publiques, API</li>
-      <li data-go="13"><span>06</span>AI Overviews et visibilité IA, intégrées au dispositif</li>
+      <li data-go="3"><span>03</span>Le workflow dans le cockpit, captures et démo en ligne</li>
+      <li data-go="6"><span>04</span>Les quatre phases, les chantiers, le calendrier</li>
+      <li data-go="16"><span>05</span>La donnée qui alimente la machine : data interne, sources publiques, API</li>
+      <li data-go="15"><span>06</span>AI Overviews et visibilité IA, intégrées au dispositif</li>
     </ol>
   </div>
   <p class="src">Document interactif : flèches du clavier pour naviguer, clic sur les éléments soulignés d'un point jaune, clic sur les captures pour zoomer.</p>
@@ -300,19 +300,80 @@
   <div class="card mt" id="modDetail"><p><b>Pourquoi séparer les deux.</b> La machinerie répond à la question « quoi produire maintenant », la valorisation à la question « qu'est-ce qui perd de la valeur en ce moment ». Ce sont deux flux distincts, et le second est celui que la plupart des dispositifs éditoriaux oublient, alors que c'est lui qui fait tenir le SEO dans la durée.</p></div>
 </section>
 
-<!-- S4 · WORKFLOW INTERACTIF -->
-<section class="slide" data-t="Le workflow, étape par étape">
+<!-- S4 · WORKFLOW DANS LE COCKPIT, ÉTAPE PAR ÉTAPE -->
+<section class="slide" data-t="Le workflow dans le cockpit, étape par étape">
   <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
-  <h1>Le workflow déroulé, étape par étape</h1>
-  <p class="lead" style="margin-bottom:10px;">La même colonne vertébrale, deux états : elle tourne dès aujourd'hui dans vos contraintes, et se reconfigure quand votre outil de publication et vos accès data évoluent. <span class="hint">cliquez sur chaque étape</span></p>
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px;">
-    <span class="ctl-lab">État du dispositif</span>
-    <div class="switch" id="swEtat"><button data-e="auj" aria-pressed="true">Aujourd'hui</button><button data-e="fin" aria-pressed="false">Fin d'année</button></div>
-    <span id="etatCaption" style="font-size:11.5px;color:var(--ink70);"></span>
-  </div>
-  <div class="backlog" id="wfBacklog"></div>
+  <h1>Le workflow dans le cockpit, étape par étape</h1>
+  <p class="lead" style="margin-bottom:10px;">Neuf étapes, et pour chacune : ce que montre le cockpit, les API qui l'alimentent, et un exemple concret. Tout est manipulable dans la démo en ligne. <span class="hint">cliquez sur chaque étape</span></p>
   <div class="spine" id="wfSpine"></div>
-  <div class="wfdetail" id="wfDetail"></div>
+  <div style="display:grid;grid-template-columns:490px 1fr;gap:14px;margin-top:12px;">
+    <div>
+      <div class="card dark" style="min-height:150px;" id="wfApis"></div>
+      <div class="card beige mt" id="wfEx" style="padding:11px 15px;"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;align-self:start;">
+      <figure class="shot" id="wfShot">
+        <img id="wfShotImg" src="assets/captures/cockpit/etape-1.png" alt="Capture de l'étape dans le cockpit" style="height:auto;">
+        <figcaption class="cap" id="wfShotCap">Le cockpit à cette étape : capture de la démo, données d'exemple</figcaption>
+      </figure>
+      <figure class="shot" style="height:196px;" data-full="assets/captures/cockpit/wf-vue.png" data-cap="La vue workflow complète dans la démo : backlog vivant scoré, les 9 étapes, et le bascule Aujourd'hui / Fin d'année qui montre comment la chaîne se reconfigure avec votre futur outil.">
+        <img src="assets/captures/cockpit/wf-vue.png" alt="Vue complète du workflow" style="object-position:top center;">
+        <figcaption class="cap">La vue complète : backlog vivant + 9 étapes + bascule Aujourd'hui / Fin d'année</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- S4bis · LA GRILLE DU COCKPIT -->
+<section class="slide beige" data-t="La grille du cockpit, source de vérité">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>Le cockpit, la source de vérité partagée</h1>
+  <p class="lead" style="margin-bottom:12px;">Une base unique (implémentation Airtable par défaut, portable vers votre outil) où chaque métier voit ce qui l'attend. Voici la grille réelle de la démo. <span class="hint">cliquez sur la capture pour zoomer</span></p>
+  <div style="display:grid;grid-template-columns:1fr 400px;gap:14px;">
+    <figure class="shot" style="height:428px;" data-full="assets/captures/cockpit/cockpit-grille.png" data-cap="La grille du cockpit : 24 fiches, score /100, type d'action à créer / à optimiser avec l'URL, vues par métier, filtres par rubrique et par cible. Données d'exemple.">
+      <img src="assets/captures/cockpit/cockpit-grille.png" alt="Grille du cockpit" style="object-position:top center;">
+      <figcaption class="cap">La grille de la démo : 24 fiches scorées, vues par métier, filtres rubrique et cible</figcaption>
+    </figure>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card"><h4>Ce que la grille rend visible</h4>
+        <ul class="cl" style="font-size:11.5px;">
+          <li><b>Score /100</b> et bandes de priorité (haute, moyenne, réservoir)</li>
+          <li><b>À créer / à optimiser</b>, avec l'URL existante quand il y en a une</li>
+          <li><b>Ré-optimisations échues</b> : le parc vieillissant remonte tout seul</li>
+          <li><b>Champs marqués API</b> : title, meta, intention, Hn du top 3, préparés automatiquement depuis la SERP</li>
+        </ul></div>
+      <div class="card"><h4>Des vues par métier</h4>
+        <p style="font-size:11.5px;">Édito voit sa file, le SEO voit ce qui est à qualifier, datashake voit la production, chacun sans le bruit des autres. Le comité s'ouvre sur la vue « à créer / à optimiser » et se ferme en 30 minutes.</p></div>
+      <div class="card dark"><h4>Manipulez-la</h4>
+        <p style="font-size:11.5px;">La démo en ligne est cliquable : filtres, fiches, tickets, schémas des 5 tables.<br><b>analytics-ds.github.io/lbc-content-factory/demo.html</b></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- S4ter · DE LA FICHE AU TICKET -->
+<section class="slide" data-t="De la fiche au ticket, sans ressaisie">
+  <div class="hd"><img src="assets/logos/Logo-Symbole-Black.svg" alt=""><span>confidentiel</span></div>
+  <h1>De la fiche au ticket, sans ressaisie</h1>
+  <p class="lead" style="margin-bottom:12px;">La fiche concentre tout ce que la machine a préparé. Le ticket pousse le travail dans votre outil (Jira, Notion, table interne ou e-mail), typé selon le statut. <span class="hint">cliquez sur les captures pour zoomer</span></p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+    <figure class="shot" style="height:400px;" data-full="assets/captures/cockpit/cockpit-fiche.png" data-cap="La fiche d'un contenu : mot-clé, page business, cycle de vie (dernière MAJ scrapée, ré-optimisation échue), title, meta et bloc à retenir pré-remplis depuis la SERP.">
+      <img src="assets/captures/cockpit/cockpit-fiche.png" alt="Fiche contenu du cockpit" style="object-position:top center;">
+      <figcaption class="cap">La fiche : cycle de vie + champs éditoriaux pré-remplis</figcaption>
+    </figure>
+    <figure class="shot" style="height:400px;" data-full="assets/captures/cockpit/cockpit-ticket.png" data-cap="Le ticket contextuel : son type et sa destination dépendent du statut de la ligne. Ici, une fiche prête part en publication vers Jira avec tous les champs à coller.">
+      <img src="assets/captures/cockpit/cockpit-ticket.png" alt="Ticket contextuel" style="object-position:top center;">
+      <figcaption class="cap">Le ticket typé, poussé vers votre outil</figcaption>
+    </figure>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card dark"><h4>Pourquoi ça règle le goulot de publication</h4>
+        <p style="font-size:11.5px;">Votre back-office impose la saisie champ par champ : le ticket livre précisément ces champs, dans l'ordre, images préparées aux bons formats. Quand votre nouvel outil arrivera, seule la sortie change, pas la chaîne.</p></div>
+      <figure class="shot" style="height:172px;" data-full="assets/captures/cockpit/n8n-recette.png" data-cap="Chaque automatisation est une recette n8n en nœuds natifs : déclencheur, appels API, IA à sortie structurée, écriture dans le cockpit. Duplicable dans votre n8n interne, zéro boîte noire.">
+        <img src="assets/captures/cockpit/n8n-recette.png" alt="Recette n8n" style="object-position:top left;">
+        <figcaption class="cap">Derrière chaque étape, une recette n8n duplicable chez vous</figcaption>
+      </figure>
+      <div class="card beige"><p style="font-size:11px;"><b>L'orchestration complète</b> (n8n contre Claude Code, Airtable en hub, comparatif et reco) est traitée dans la partie dédiée du dossier.</p></div>
+    </div>
+  </div>
 </section>
 
 <!-- S5 · QUATRE PHASES -->
@@ -468,7 +529,7 @@
     <h1>La donnée qui alimente la machine</h1>
     <p class="sub">Trois étages de données, des API précises, et vos propres chiffres au sommet. C'est ce qui sépare un contenu que l'IA peut recopier d'un contenu que l'IA doit citer.</p>
     <ol>
-      <li data-go="9"><span>01</span>Les trois étages et leur rôle respectif</li>
+      <li data-go="15"><span>01</span>Les trois étages et leur rôle respectif</li>
       <li data-go="10"><span>02</span>Votre data propriétaire, verticale par verticale</li>
       <li data-go="11"><span>03</span>Les jeux de données publics, avec les sources en situation</li>
       <li data-go="12"><span>04</span>Les API tierces, usage par usage</li>
@@ -760,6 +821,7 @@
   <span id="counter">1 / 15</span>
   <div id="prog"><i></i></div>
   <span class="kbd">flèches pour naviguer · S sommaire · clic sur les captures pour zoomer</span>
+  <button onclick="window.open('demo.html','_blank')">Démo live</button>
   <button id="btnToc">Sommaire</button>
 </div>
 <div id="toc"><h2>Sommaire</h2><ol id="tocList"></ol></div>
@@ -851,30 +913,36 @@
     });
   });
 
-  // S4 : workflow
+  // S4 : workflow étape par étape, capture + API + exemple
   var STEPS=[
-    {n:1,nm:"Backlog et captation",side:"machine",accel:"réservoir toujours plein",base:"Un registre unique de sujets pré-qualifiés, alimenté par vos SEO (le quoi) et par notre veille. Deux mois d'avance : vous piochez, vous ne cherchez pas.",auj:"Veille sur sources publiques et vos cibles SEO.",fin:"La donnée des annonces et les études internes alimentent le backlog en continu."},
-    {n:2,nm:"Comité et pioche",side:"humain",accel:null,base:"Comité hebdomadaire court avec SEO et édito : tendances, requêtes prioritaires, arbitrage. Vous décidez le quoi.",auj:"Backlog priorisé avec vous, en comité.",fin:"Même rituel, signaux data élargis."},
-    {n:3,nm:"Brief-contrat",side:"mixte",accel:"pré-brief outillé",base:"Brief pré-rempli à 70 % par la machine, finalisé par le consultant, validé par vos SEO en un passage. Un brief validé ne se rediscute plus.",auj:"Pré-brief sur nos outils et les vôtres (Yooda, SEMrush).",fin:"Pré-brief nourri de la data annonces et des études."},
-    {n:4,nm:"Preuve (J-30)",side:"mixte",accel:"collecte découplée",base:"La matière non régénérable (chiffre exclusif, étude, citation) se sécurise en avance. Règle dure : pas de preuve, on permute, jamais de générique.",auj:"Études internes, data publique, terrain.",fin:"Accès élargi annonces et équipe Études : preuve systématique."},
-    {n:5,nm:"Rédaction experte",side:"humain",accel:null,base:"Rédacteurs spécialisés par verticale, interviews comprises. L'IA aide à couvrir, la plume reste humaine. Risque spam maîtrisé.",auj:"Standards de citabilité calibrés sur le back-office actuel.",fin:"Formats courts déblocables : vous les produisez en interne, l'agence garde la forte valeur."},
-    {n:6,nm:"Visa de conformité",side:"mixte",accel:"protège vos relectures",base:"Avant de vous parvenir, chaque texte est confronté à son brief. La machine vérifie le contrat, l'humain juge le texte.",auj:"Contrôle systématique côté agence : vous validez, vous ne corrigez pas.",fin:"Contrôle de balisage Schema quand le CMS le portera."},
-    {n:7,nm:"Validation",side:"humain",accel:"lissage et relances",base:"Vos allers-retours portent sur un texte déjà conforme. Livraison lissée, relances automatiques, charge mesurée à la baisse.",auj:"Relecture en document commenté, créneaux batchés.",fin:"Intégrable à votre nouvel outil de publication."},
-    {n:8,nm:"Publication",side:"humain",accel:"package prêt à coller",base:"Le cœur de la modularité. Le package se reconfigure dès que votre outil interne est prêt.",auj:"Package prêt à coller champ par champ, préparation des images automatisée.",fin:"Nouvel outil : formats courts, visuels intégrés, temps de publication effondré."},
-    {n:9,nm:"Mesure et boucle",side:"mixte",accel:"baseline et critère",base:"Baseline avant le premier contenu, critère de succès au brief : on répond à « est-ce que ça marche ». La couverture d'abord.",auj:"Articulé avec Piano Analytics et le rapport AIO de la Search Console.",fin:"Data élargie : contribution aux pages de listing mesurée finement."}
+    {n:1,nm:"Backlog et captation",side:"machine",
+     apis:[["fav-gsc.ico","Search Console API","requêtes en perte d'impressions, contenus qui décrochent"],["fav-dataforseo.ico","DataForSEO Labs","volumes, tendances 12 mois, idées de mots-clés par grappe"],["","Trending topics leboncoin","export de ce que la France cherche chez vous cette semaine"],["","Veille sectorielle","flux presse, réglementation, marronniers par verticale"]],
+     ex:"« passoire thermique location interdiction », 6 600 recherches par mois, tendance en hausse : le sujet entre seul au backlog, déjà scoré 90."},
+    {n:2,nm:"Comité et pioche",side:"humain",
+     apis:[["","Aucune API : le cockpit suffit","vues par métier, stats du backlog, bandes de priorité. C'est l'étape où l'humain décide, et c'est voulu"]],
+     ex:"Le comité s'ouvre sur la vue « à créer / à optimiser » : 24 fiches, 13 à créer, 11 à optimiser, 4 ré-optimisations échues. 30 minutes suffisent."},
+    {n:3,nm:"Brief-contrat",side:"mixte",
+     apis:[["fav-dataforseo.ico","DataForSEO SERP","top 10 réel, questions posées (PAA), présence d'un AI Overview"],["fav-dataforseo.ico","DataForSEO On-Page","structure Hn et formats des 3 pages en tête"],["fav-anthropic.ico","Modèle de langage","assemble title, meta, plan Hn, bloc à retenir. Le consultant finalise, vos SEO valident en un passage"]],
+     ex:"La fiche « Réussir un vide-grenier » sort avec title, meta et bloc à retenir pré-remplis depuis la SERP : le brief est à 70 % prêt avant qu'un humain l'ouvre."},
+    {n:4,nm:"Preuve (J-30)",side:"mixte",
+     apis:[["","Data annonces leboncoin","prix, volumes, délais : le chiffre que vous seuls détenez"],["fav-datagouv.ico","DVF, ADEME, data.gouv","la référence officielle qui crédibilise votre chiffre"],["","API métier (phase 2-3)","cotes auto, taux de crédit, indices sectoriels selon le sujet"]],
+     ex:"Pour le baromètre immo : vos prix affichés croisés aux ventes DVF du même trimestre, même territoire. Pas de preuve disponible : on permute de sujet, jamais de générique."},
+    {n:5,nm:"Rédaction experte",side:"humain",
+     apis:[["fav-anthropic.ico","Modèle de langage en appui","couverture sémantique, reformulations. La plume reste humaine"],["","Scoring sémantique","le texte est mesuré contre le meilleur concurrent jusqu'à le dépasser"]],
+     ex:"Rédacteur spécialisé immo, interview comprise. Le contenu ne part que lorsque son score sémantique dépasse le premier résultat actuel."},
+    {n:6,nm:"Visa de conformité",side:"mixte",
+     apis:[["fav-anthropic.ico","Contrôle automatique brief contre texte","chaque engagement du brief est vérifié : Hn couverts, bloc à retenir, sources citées, maillage posé"]],
+     ex:"La machine vérifie le contrat, l'humain juge le texte : vous validez, vous ne corrigez pas."},
+    {n:7,nm:"Validation",side:"humain",
+     apis:[["","Notifications et relances","créneaux de relecture batchés, relances automatiques, charge suivie"]],
+     ex:"Vos allers-retours portent sur un texte déjà conforme. La charge de relecture de votre équipe est mesurée, à la baisse."},
+    {n:8,nm:"Publication",side:"humain",
+     apis:[["fav-jira.ico","API Jira","création automatique du ticket typé, champs dans l'ordre de votre back-office"],["","API du futur CMS","le jour où votre nouvel outil arrive, seule la sortie change"]],
+     ex:"Le ticket « Publier » livre chaque champ prêt à coller, images redimensionnées aux bons formats : le goulot est contourné, pas subi."},
+    {n:9,nm:"Mesure et boucle",side:"mixte",
+     apis:[["fav-gsc.ico","Search Console + rapport AIO","impressions, clics, et l'exposition aux réponses génératives"],["fav-semrush.ico","Suivi de position","vos licences Yooda et SEMrush, branchées telles quelles"],["","Piano Analytics","ce que ses limites permettent, arbitré au cadrage"],["fav-perplexity.ico","Visibilité IA","présence de la marque dans ChatGPT, Perplexity, Gemini"]],
+     ex:"Baseline posée avant publication, critère de succès écrit au brief. Un contenu qui décroche redevient un sujet au backlog : la boucle est fermée."}
   ];
-  var BACKLOG=[
-    {t:"Fiabilité par modèle : les pannes connues",r:"Auto",sc:87},
-    {t:"DPE 2027 : ce qui change pour les bailleurs",r:"Immo",sc:84},
-    {t:"Baromètre prix, édition pro",r:"B2B",sc:81},
-    {t:"Bien vendre son électroménager d'occasion",r:"Conso",sc:74},
-    {t:"Estimer son bien avant de vendre",r:"Immo",sc:72},
-    {t:"Leasing électrique : à vérifier avant de signer",r:"Auto",sc:70}
-  ];
-  var CAP={auj:"Back-office actuel : saisie champ par champ, images à la main. Le dispositif tourne dans ces contraintes, sans rien attendre.",
-           fin:"Votre nouvel outil de publication porte les formats courts, l'accès data s'élargit. Même colonne vertébrale, nouvelles capacités, rien à reconstruire."};
-  var etat='auj';
-  document.getElementById('wfBacklog').innerHTML='<div class="bcard" style="flex:0 0 148px;background:var(--noir);border-color:var(--noir);"><div class="bt" style="color:#fff;font-family:\'Season Sans\',sans-serif;font-weight:400;">Le backlog vivant</div><div class="bm"><span class="chip" style="background:var(--jaune);border-color:var(--jaune);color:var(--noir);">vous piochez</span></div></div>'+BACKLOG.map(function(b){return '<div class="bcard"><div class="bt">'+b.t+'</div><div class="bm"><span class="chip">'+b.r+'</span><span class="chip sc">score '+b.sc+'</span></div></div>';}).join('');
   var spine=document.getElementById('wfSpine');
   STEPS.forEach(function(s,i){
     var w=document.createElement('div');w.className='wfstep';
@@ -882,30 +950,27 @@
     w.querySelector('button').addEventListener('click',function(){selStep(i);});
     spine.appendChild(w);
   });
-  function renderDetail(i){
-    var s=STEPS[i];
-    var accel=s.accel?'<div class="cell accel"><b>Levier d\'accélération</b>'+s.accel+'</div>':'<div class="cell"><b>Levier d\'accélération</b>L\'humain pilote cette étape : c\'est voulu.</div>';
-    document.getElementById('wfDetail').innerHTML='<h3>0'+s.n+' · '+s.nm+'</h3><p class="base">'+s.base+'</p>'+
-      '<div class="cells"><div class="cell'+(etat==='auj'?' hlA':'')+'"><b>Aujourd\'hui</b>'+s.auj+'</div>'+
-      '<div class="cell'+(etat==='fin'?' hlB':'')+'"><b>Fin d\'année</b>'+s.fin+'</div>'+accel+'</div>';
-  }
   var curStep=0;
   function selStep(i){
     curStep=i;
     [].slice.call(spine.querySelectorAll('.wfbtn')).forEach(function(b,j){b.classList.toggle('sel',j===i);});
-    renderDetail(i);
+    var s=STEPS[i];
+    document.getElementById('wfApis').innerHTML='<h4 style="margin-bottom:8px;">0'+s.n+' · '+s.nm+' : ce qui alimente l\'étape</h4>'+
+      s.apis.map(function(a){
+        var ic=a[0]?'<img class="logo16" src="assets/logos/'+a[0]+'" alt="">':'<span class="logo16" style="display:inline-block;background:var(--kaki);border-radius:3px;"></span>';
+        return '<p style="font-size:11.5px;margin-bottom:6px;">'+ic+'<b>'+a[1]+'</b> : '+a[2]+'</p>';
+      }).join('');
+    document.getElementById('wfEx').innerHTML='<p style="font-size:11.5px;"><b>Exemple dans le cockpit.</b> '+s.ex+'</p>';
+    var img=document.getElementById('wfShotImg');
+    img.src='assets/captures/cockpit/etape-'+s.n+'.png';
   }
-  function setEtat(e){
-    etat=e;
-    document.getElementById('etatCaption').textContent=CAP[e];
-    var sw=document.getElementById('swEtat');
-    [].slice.call(sw.querySelectorAll('button')).forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-e')===e?'true':'false');});
-    renderDetail(curStep);
-  }
-  document.getElementById('swEtat').addEventListener('click',function(e){
-    var b=e.target.closest('button');if(b)setEtat(b.getAttribute('data-e'));
+  var wfShot=document.getElementById('wfShot');
+  wfShot.addEventListener('click',function(){
+    lb.querySelector('img').src=document.getElementById('wfShotImg').src;
+    lb.querySelector('.lcap').textContent='Étape 0'+STEPS[curStep].n+' · '+STEPS[curStep].nm+' : le panneau du cockpit dans la démo (données d\'exemple).';
+    lb.classList.add('open');
   });
-  setEtat('auj');selStep(0);
+  selStep(0);
 
   // S5 : phases
   [].slice.call(document.querySelectorAll('.phasecard')).forEach(function(c){
