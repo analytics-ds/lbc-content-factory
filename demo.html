@@ -629,13 +629,16 @@ tabs.forEach(function(t){t.addEventListener("click",function(){
   if(v==="metiers"&&!inited.metiers){renderMetiers();inited.metiers=1;}
   if(history.replaceState) history.replaceState(null,"","#"+v);
 });});
-/* deep-link : demo.html#cockpit ouvre directement la vue */
+/* deep-link : demo.html#cockpit ouvre directement la vue ; #cockpit/briefs ouvre aussi l'onglet de table */
+window.__deepTable=null;
 (function(){
   var h=(location.hash||"").replace("#","");
-  if(h && VIEWS[h] && h!=="wf"){
-    var btn=document.querySelector('nav.tabs button[data-view="'+h+'"]');
+  var parts=h.split("/");
+  if(parts[0] && VIEWS[parts[0]] && parts[0]!=="wf"){
+    var btn=document.querySelector('nav.tabs button[data-view="'+parts[0]+'"]');
     if(btn) btn.click();
   }
+  if(parts[0]==="cockpit" && parts[1]) window.__deepTable=parts[1];
 })();
 
 /* ---------- MODAL ---------- */
@@ -912,6 +915,7 @@ function showTable(key){
     "<p class='ti-note'>Ce schéma est la base de travail pour la création de votre Airtable (ou de la structure équivalente dans votre outil) : champs, types et liens entre tables sont posés, il ne reste qu'à les créer.</p>";
 }
 document.querySelectorAll(".att").forEach(function(b){b.addEventListener("click",function(){showTable(b.dataset.table);});});
+if(window.__deepTable){ try{ showTable(window.__deepTable); }catch(e){} window.__deepTable=null; }
 
 /* ================= BLUEPRINT N8N ================= */
 var BP=[
