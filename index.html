@@ -306,21 +306,15 @@
   <h1>Le workflow dans le cockpit, étape par étape</h1>
   <p class="lead" style="margin-bottom:10px;">Neuf étapes, et pour chacune : ce que montre le cockpit, les API qui l'alimentent, et un exemple concret. Tout est manipulable dans la démo en ligne. <span class="hint">cliquez sur chaque étape</span></p>
   <div class="spine" id="wfSpine"></div>
-  <div style="display:grid;grid-template-columns:490px 1fr;gap:14px;margin-top:12px;">
-    <div>
-      <div class="card dark" style="min-height:150px;" id="wfApis"></div>
-      <div class="card beige mt" id="wfEx" style="padding:11px 15px;"></div>
+  <div style="display:grid;grid-template-columns:370px 1fr;gap:14px;margin-top:12px;align-items:start;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card dark" style="min-height:230px;" id="wfApis"></div>
+      <div class="card beige" id="wfEx" style="padding:11px 15px;"></div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:10px;align-self:start;">
-      <figure class="shot" id="wfShot">
-        <img id="wfShotImg" src="assets/captures/cockpit/etape-1.png" alt="Capture de l'étape dans le cockpit" style="height:auto;">
-        <figcaption class="cap" id="wfShotCap">Le cockpit à cette étape : capture de la démo, données d'exemple</figcaption>
-      </figure>
-      <figure class="shot" style="height:196px;" data-full="assets/captures/cockpit/wf-vue.png" data-cap="La vue workflow complète dans la démo : backlog vivant scoré, les 9 étapes, et le bascule Aujourd'hui / Fin d'année qui montre comment la chaîne se reconfigure avec votre futur outil.">
-        <img src="assets/captures/cockpit/wf-vue.png" alt="Vue complète du workflow" style="object-position:top center;">
-        <figcaption class="cap">La vue complète : backlog vivant + 9 étapes + bascule Aujourd'hui / Fin d'année</figcaption>
-      </figure>
-    </div>
+    <figure class="shot" id="wfShot" style="height:auto;">
+      <img id="wfShotImg" src="assets/captures/cockpit/etape-1.png" alt="Capture de l'étape dans le cockpit" style="width:100%;height:auto;display:block;">
+      <figcaption class="cap" id="wfShotCap" style="position:static;">La démo à cette étape : backlog vivant, frise des 9 étapes, détail de l'étape sélectionnée. Données d'exemple.</figcaption>
+    </figure>
   </div>
 </section>
 
