@@ -627,7 +627,16 @@ tabs.forEach(function(t){t.addEventListener("click",function(){
   if(v==="chantiers"&&!inited.chantiers){renderChantiers();inited.chantiers=1;}
   if(v==="scenarios"&&!inited.scenarios){renderScenarios();inited.scenarios=1;}
   if(v==="metiers"&&!inited.metiers){renderMetiers();inited.metiers=1;}
+  if(history.replaceState) history.replaceState(null,"","#"+v);
 });});
+/* deep-link : demo.html#cockpit ouvre directement la vue */
+(function(){
+  var h=(location.hash||"").replace("#","");
+  if(h && VIEWS[h] && h!=="wf"){
+    var btn=document.querySelector('nav.tabs button[data-view="'+h+'"]');
+    if(btn) btn.click();
+  }
+})();
 
 /* ---------- MODAL ---------- */
 var modal=$("#modal"),modalCard=$("#modalCard");
