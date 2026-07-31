@@ -224,15 +224,20 @@
   .att{cursor:pointer;transition:background .15s,color .15s;} .att:hover{color:var(--ink);background:var(--surface-2);} .att:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .table-info{padding:18px 20px;} .table-info .ti-desc{font-size:14.5px;color:var(--ink-2);max-width:80ch;margin:0 0 6px;}
   .table-info .ti-feed{font:600 12px var(--fb);color:var(--machine);margin:0 0 14px;}
+  .fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:9px;}
+  .fcard{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:11px 14px;font-size:12.5px;color:var(--ink-2);line-height:1.45;}
+  .fcard b{display:block;font:600 13px var(--fd);color:var(--ink);margin-bottom:3px;}
+  .flink{font:700 8.5px var(--fb);letter-spacing:.05em;text-transform:uppercase;background:#FFFF7D;color:#141413;border-radius:999px;padding:1px 7px;margin-left:5px;vertical-align:middle;}
   .schema{overflow-x:auto;border:1px solid var(--line);border-radius:9px;} table.schema-t{border-collapse:collapse;width:100%;min-width:640px;font-size:13px;}
   table.schema-t th{text-align:left;font:700 10px var(--fb);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:8px 12px;background:var(--surface-2);border-bottom:1px solid var(--line);}
   table.schema-t td{padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top;} table.schema-t tr:last-child td{border-bottom:none;}
   .ftype{font:600 10.5px var(--fm);background:var(--si-soft);color:var(--si);border-radius:5px;padding:2px 7px;white-space:nowrap;}
   .ftype.link{background:var(--accent-soft);color:var(--accent);} .ftype.api{background:var(--machine-soft);color:var(--machine);}
   .samples{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px;margin-top:14px;}
-  .sample{border:1px solid var(--line);border-radius:9px;background:var(--surface-2);padding:10px 13px;font-size:12.5px;color:var(--ink-2);}
+  .sample{border:1px solid #E7DFD7;border-radius:10px;background:#F3EDE8;padding:11px 14px;font-size:12.5px;color:var(--ink-2);}
+  @media (prefers-color-scheme:dark){.sample{background:var(--surface-2);border-color:var(--line);}}
   .sample b{display:block;font:700 12.5px var(--fd);color:var(--ink);margin-bottom:3px;}
-  .ti-note{margin-top:14px;border-left:3px solid var(--ok);padding-left:12px;font-size:13px;color:var(--ink-2);max-width:80ch;}
+  .ti-note{margin-top:14px;border-left:3px solid #FFFF7D;padding-left:12px;font-size:13px;color:var(--ink-2);max-width:80ch;}
   /* cycle de vie : créer / optimiser + dates */
   .ta-pill{display:inline-flex;align-items:center;gap:5px;font:700 10.5px var(--fb);letter-spacing:.03em;text-transform:uppercase;padding:3px 10px;border-radius:999px;white-space:nowrap;}
   .ta-pill.creer{background:var(--ok-soft);color:var(--ok);} .ta-pill.optimiser{background:var(--accent-soft);color:var(--accent);}
@@ -766,7 +771,7 @@ serpEl:{h:'Éléments attendus (SERP) <span class="th-api">API</span>',r:functio
 tk:{h:"Action",r:function(r,i){return '<td><button class="row-tk" data-i="'+i+'">Créer le brief</button></td>';}}};
 var DEST={jira:"Jira",notion:"Notion",interne:"Table interne",email:"E-mail structuré"};
 var airHead=$("#airHead"),airBody=$("#airBody");
-var TIPS={t:"Identifiant lisible de la fiche. Le bouton + déplie les sujets associés du cluster ; cliquez sur la ligne pour la fiche complète.",vol:"Search volume mensuel du mot-clé prioritaire (via API SEO).",score:"Score de priorité /100 : volume + intention + page business + faisabilité + trafic protégé (AIO) + bonus d'ancienneté (un contenu ancien remonte). Survolez pour la décomposition. Le score trie, le comité décide.",kw:"Le mot-clé prioritaire, fourni ou validé par l'équipe SEO leboncoin (le quoi).",cible:"B2C (leboncoin.fr) ou B2B (Solutions Pro, Publicité).",rub:"La rubrique ou le site de publication.",typeAction:"À créer (le contenu n'existe pas) ou à optimiser (contenu existant, URL affichée).",st:"Le statut dans le cycle : de l'opportunité au verdict à 90 jours.",title:"Balise title proposée (55-65 caractères), finalisée par le consultant.",meta:"Meta description proposée (140-158 caractères), incitative.",intention:"Déduite du top 3 de la SERP via API : ce que l'internaute cherche vraiment.",bloc:"Les faits saillants extractibles (encadré À retenir), exigence GEO.",topSource:"Les sources d'autorité que le top 3 cite sur ce mot-clé : à citer dans le contenu.",fanout:"Requêtes connexes catégorisées à couvrir, générées depuis la SERP via API.",hn:"Structure H2/H3 synthétisée du top 3, scrapée via API.",serpEl:"Les éléments hors texte que la SERP attend (tableau, simulateur, photos...), à prévoir au brief.",majDate:"Date de dernière mise à jour du contenu existant, scrapée (schema dateModified ou date visible on-site).",reoptDate:"Ré-optimisation par défaut : dernière MAJ + 6 mois. Badge « échue » si dépassée.",briefDate:"Date de création du brief, au format JJ/MM/AAAA.",livraisonDate:"Date de livraison du contenu, au format JJ/MM/AAAA.",resp:"Qui a la main en ce moment : la donnée qui tue les temps morts.",tk:"Génère le brief complet (13 champs) et le pousse vers votre outil : Jira, Notion, table interne ou e-mail."};
+var TIPS={t:"Identifiant lisible de la fiche. Le bouton + déplie les sujets associés du cluster ; cliquez sur la ligne pour la fiche complète.",vol:"Search volume mensuel du mot-clé prioritaire (via API SEO).",score:"Score de priorité /100 : volume + intention + page business + faisabilité + trafic protégé (AIO) + bonus d'ancienneté (un contenu ancien remonte). Survolez pour la décomposition. Le score trie, le comité décide.",kw:"Le mot-clé prioritaire, fourni ou validé par l'équipe SEO leboncoin (le quoi).",cible:"B2C (leboncoin.fr) ou B2B (Solutions Pro, Publicité).",rub:"La rubrique ou le site de publication.",typeAction:"À créer (le contenu n'existe pas) ou à optimiser (contenu existant, URL affichée).",st:"Le statut dans le cycle : de l'opportunité au verdict à 90 jours.",title:"Balise title proposée (55-65 caractères), finalisée par le consultant.",meta:"Meta description proposée (140-158 caractères), incitative.",intention:"Déduite du top 3 de la SERP via API : ce que l'internaute cherche vraiment.",bloc:"Les faits saillants extractibles (encadré À retenir), exigence GEO.",topSource:"Les sources d'autorité que le top 3 cite sur ce mot-clé : à citer dans le contenu.",fanout:"Les questions que les internautes posent autour du sujet : le contenu doit y répondre.",hn:"Structure H2/H3 synthétisée du top 3, scrapée via API.",serpEl:"Les éléments hors texte que la SERP attend (tableau, simulateur, photos...), à prévoir au brief.",majDate:"Date de dernière mise à jour du contenu existant, scrapée (schema dateModified ou date visible on-site).",reoptDate:"Ré-optimisation par défaut : dernière MAJ + 6 mois. Badge « échue » si dépassée.",briefDate:"Date de création du brief, au format JJ/MM/AAAA.",livraisonDate:"Date de livraison du contenu, au format JJ/MM/AAAA.",resp:"Qui a la main en ce moment : la donnée qui tue les temps morts.",tk:"Génère le brief complet (13 champs) et le pousse vers votre outil : Jira, Notion, table interne ou e-mail."};
 var fRubV=null,fCibleV=null,curView="grille";
 function matchF(r){return (!fRubV||r.rub===fRubV)&&(!fCibleV||r.cible===fCibleV);}
 function renderCockpit(vk){curView=vk;var v=CVIEWS[vk];airHead.innerHTML="<tr>"+v.cols.map(function(c){return '<th title="'+(TIPS[c]||"")+'">'+COLS[c].h+"</th>";}).join("")+"</tr>";
@@ -922,7 +927,7 @@ renderCockpit("grille");
 var TABLES={
 assets:null,
 opp:{nom:"Opportunités",
- desc:"Le réservoir de sujets pré-qualifiés, alimenté par les deux parties : le quoi de vos 5 SEO et la veille datashake (réglementaire, concurrentielle, terrain B2B). Deux mois d'avance en permanence : le comité pioche ici, il n'invente pas en séance.",
+ desc:"La liste des sujets possibles, remplie en continu par vos SEO et par notre veille. Le comité pioche ici : personne n'invente en séance, il y a toujours deux mois d'avance.",
  feed:"Alimentée par : équipe SEO leboncoin + workflows de veille datashake · Arbitrée par : le comité",
  fields:[["Sujet / mot-clé","Texte","Ce qui a été détecté ou proposé"],
  ["Source du signal","Sélection unique","Veille réglementaire, striking distance, requête en hausse, saisonnalité, demande terrain B2B, proposition édito ou SEO"],
@@ -937,7 +942,7 @@ opp:{nom:"Opportunités",
  ["Détecteur","Texte","Humain ou workflow : chaque signal est traçable"]],
  samples:[["ZFE : calendrier durci","Vigie réglementaire, détectée J0 à 8h, score 79, circuit court 72 h proposé"],["citadines occasion fiables","Striking distance (position 6-8, fort volume), score 74, page listing citadines"],["seconde main en boutique","Demande terrain d'un commercial Solutions Pro, à arbitrer au prochain comité"]]},
 briefs:{nom:"Briefs",
- desc:"Le brief-contrat : verrouillé par vos SEO avant rédaction, en un seul passage, tacite à échéance. Un brief validé ne se rediscute plus en relecture. C'est ici que vivent les champs pré-remplis depuis le top 3 SERP via API : l'expert valide et enrichit, il ne part jamais d'une page blanche.",
+ desc:"Un brief par contenu, pré-rempli par la machine et validé par vos SEO en un passage. Une fois validé, il ne se rediscute plus : personne ne part d'une page blanche, personne ne refait le débat en relecture.",
  feed:"Pré-rempli à 70 % par la machine · Finalisé par le consultant datashake · Validé par l'équipe SEO leboncoin",
  fields:[["Content Asset lié","Lien ↔ Content Assets","Rattachement à la fiche pivot"],
  ["Objectif et critère de succès à 90 j","Texte","Ce que le contenu doit produire ; c'est contre ce critère qu'il sera jugé au verdict"],
@@ -957,7 +962,7 @@ briefs:{nom:"Briefs",
  ["Validateur et date","Utilisateur + Date","Traçabilité : qui a validé, quand ; tacite à échéance de 2 jours ouvrés"]],
  samples:[["Brief « DPE et location 2025 »","Critère : top 5 sur le mot-clé à 90 j · preuve : texte officiel + ANIL · tag conformité posé"],["Brief « prix m2 Lyon »","Angle data annonces par arrondissement · fan-out 6 requêtes · Hn du top 3 en base"],["Brief « avis clients garage »","Persona garagiste · preuve : verbatims terrain du commercial · maillage vers l'offre Solutions Pro"]]},
 pages:{nom:"Pages business",
- desc:"La destination de la valeur : l'inventaire des pages villes, modèles, listings et Solutions Pro que le contenu doit nourrir. Votre principe directeur (le contenu alimente les listings) matérialisé : chaque contenu naît avec sa page business identifiée, avant même d'être écrit.",
+ desc:"L'inventaire des pages qui rapportent : listings, pages villes, modèles, offres Solutions Pro. Chaque contenu naît relié à l'une d'elles : on sait avant d'écrire quelle page business il va nourrir.",
  feed:"Priorités déclarées par vos équipes marché (le quoi) · KPI rattachés par API GSC ou import mensuel",
  fields:[["URL","URL","La page à renforcer"],
  ["Type de page","Sélection unique","Page ville, page modèle, listing, Solutions Pro, landing d'acquisition"],
@@ -970,7 +975,7 @@ pages:{nom:"Pages business",
  ["Responsable marché","Utilisateur","L'interlocuteur leboncoin de la verticale"]],
  samples:[["Listing Location immobilier","4 contenus liés · 7 liens éditoriaux entrants · priorité haute"],["Page modèle Peugeot 208","2 contenus liés · requêtes marque+modèle sans AIO : trafic protégé"],["Solutions Pro immo, offre diffusion","3 contenus liés · KPI suivi : leads générés"]]},
 comites:{nom:"Comités",
- desc:"La mémoire qui fait foi : chaque décision, chaque sujet écarté avec son motif, chaque arbitrage 70/20/10. On arbitre une fois, on consigne, on ne rouvre pas avant le verdict à 90 jours. L'ordre du jour et le tableau de bord sont générés automatiquement à J-2 : le comité décide, il ne prépare pas.",
+ desc:"Le carnet de bord des comités : ce qui a été décidé, ce qui a été écarté et pourquoi. On décide une fois, on le note, on ne rouvre pas le débat. L'ordre du jour se prépare tout seul deux jours avant : le comité décide, il ne prépare pas.",
  feed:"Préparé par la machine à J-2 · Décidé par leboncoin · Consigné pour de bon",
  fields:[["Date et participants","Date + Utilisateurs","Traçabilité de l'instance, hebdo ou bi-hebdo selon votre choix"],
  ["Ordre du jour","Lien ↔ Opportunités","Les sujets scorés proposés, assemblés automatiquement à J-2"],
@@ -995,12 +1000,13 @@ function showTable(key){
   tableInfo.style.display=isAssets?"none":"";
   if(isAssets)return;
   var T=TABLES[key];
-  tableInfo.innerHTML="<p class='ti-desc'><b>"+T.nom+".</b> "+T.desc+"</p><p class='ti-feed'>"+T.feed+"</p>"+
-    "<div class='schema'><table class='schema-t'><thead><tr><th>Champ</th><th>Type de champ</th><th>À quoi il sert</th></tr></thead><tbody>"+
-    T.fields.map(function(f){var cls=f[1].indexOf("API")>=0?"api":(f[1].indexOf("Lien")>=0?"link":"");return "<tr><td><b>"+f[0]+"</b></td><td><span class='ftype "+cls+"'>"+f[1]+"</span></td><td>"+f[2]+"</td></tr>";}).join("")+
-    "</tbody></table></div>"+
+  tableInfo.innerHTML="<p class='ti-desc'><b>"+T.nom+".</b> "+T.desc+"</p>"+
+    "<div class='b-lab' style='margin:14px 0 9px'>Ce que cette table retient</div>"+
+    "<div class='fcards'>"+T.fields.map(function(f){var isApi=f[1].indexOf("API")>=0;var isLink=f[1].indexOf("Lien")>=0;
+      return "<div class='fcard'><b>"+f[0]+(isApi?" <span class='th-api'>API</span>":"")+(isLink?" <span class='flink'>reliée</span>":"")+"</b><span>"+f[2]+"</span></div>";}).join("")+"</div>"+
+    "<div class='b-lab' style='margin:16px 0 9px'>À quoi ça ressemble en vrai</div>"+
     "<div class='samples'>"+T.samples.map(function(s){return "<div class='sample'><b>"+s[0]+"</b>"+s[1]+"</div>";}).join("")+"</div>"+
-    "<p class='ti-note'>Ce schéma est la base de travail pour la création de votre Airtable (ou de la structure équivalente dans votre outil) : champs, types et liens entre tables sont posés, il ne reste qu'à les créer.</p>";
+    "<p class='ti-note'>Cette structure est prête à créer dans votre outil, Airtable ou équivalent : rien à inventer, tout est posé.</p>";
 }
 document.querySelectorAll(".att").forEach(function(b){b.addEventListener("click",function(){showTable(b.dataset.table);});});
 
