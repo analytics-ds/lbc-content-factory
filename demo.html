@@ -87,6 +87,10 @@
   .wf-tool img{width:14px;height:14px;border-radius:3px;flex:none;}
   .wf-tool .sq{width:11px;height:11px;border-radius:3px;background:#ADAC2F;flex:none;}
   .wf-tool b{color:var(--ink);font-weight:600;}
+  .wf-prec{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:7px 22px;}
+  .wf-prec li{position:relative;padding-left:16px;font-size:13px;color:var(--ink-2);line-height:1.45;}
+  .wf-prec li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;background:#FFFF7D;border:1px solid #d8d84a;}
+  @media (max-width:700px){.wf-prec{grid-template-columns:1fr;}}
   .wf-ex{margin-top:12px;background:var(--surface-2);border-left:3px solid #FFFF7D;padding:10px 14px;border-radius:8px;font-size:12.5px;color:var(--ink-2);}
   .wf-ex b{color:var(--ink);}
   .detail h3{margin:0 0 4px;font:700 17px var(--fd);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
@@ -369,19 +373,11 @@
   <section class="view active" id="v-wf">
     <p class="eyebrow">Le workflow</p>
     <h2 class="vt">Un workflow qui accélère, où vous piochez, et qui suit votre évolution</h2>
-    <p class="lede">Neuf étapes, de la veille à la mesure. Cliquez sur une étape pour voir ce qui s'y passe, et basculez entre aujourd'hui et la fin d'année : même colonne vertébrale, deux états.</p>
-    <div class="controls">
-      <div class="ctl"><span class="lab">Modularité, faites glisser l'état</span>
-        <div class="switch state" role="group"><button data-s="aujourdhui" aria-pressed="true">Aujourd'hui</button><button data-s="finannee" aria-pressed="false">Fin d'année</button></div></div>
-      <div class="ctl"><span class="lab">Option Studio (visuels IA)</span>
-        <div class="switch studio-toggle" role="group"><button data-studio="off" aria-pressed="true">Sans</button><button data-studio="on" aria-pressed="false">Avec Studio</button></div></div>
-    </div>
-    <div class="state-caption" id="stateCaption"></div>
+    <p class="lede">Neuf étapes, de la veille à la mesure. Cliquez sur une étape pour voir précisément ce qui s'y passe, avec un exemple concret.</p>
     <div class="backlog"><div class="backlog-h"><span class="t">Le backlog vivant</span><span class="pill pioche">vous piochez</span><span class="s">Sujets pré-qualifiés et pré-briefés, deux mois d'avance. Vos équipes tirent le bon sujet, l'agence garde le réservoir plein.</span></div><div class="cards" id="backlogCards"></div></div>
     <div class="flow-down">↓</div>
     <div class="spine-wrap"><div class="spine" id="spine"></div></div>
-    <div class="studio-branch" id="studioBranch"><div><div class="st">Studio, création de visuels et infographies par IA <span class="opt">option</span></div><p id="studioText"></p></div></div>
-    <div class="detail" id="wfDetail"><h3>Cliquez sur une étape</h3><p class="base">Chaque étape montre qui pilote, le levier d'accélération et comment elle se reconfigure entre aujourd'hui et la fin d'année.</p></div>
+    <div class="detail" id="wfDetail"><h3>Cliquez sur une étape</h3><p class="base">Chaque étape montre qui pilote, ce qui s'y passe précisément, et un exemple concret.</p></div>
   </section>
 
   <!-- COCKPIT -->
@@ -693,6 +689,16 @@ var STEPS=[
 {n:9,nm:"Mesure & boucle",side:"mixte",accel:"baseline & critère",base:"Baseline avant le 1er contenu, critère de succès au brief : on répond à est-ce que ça marche. Critère : la couverture d'abord.",auj:"Articulé avec Piano Analytics et le rapport AIO de GSC.",fin:"Data élargie : contribution aux pages de listing mesurée finement.",mod:true}];
 var STUDIO={aujourdhui:"Aujourd'hui : le Studio produit des infographies et visuels prêts hors articles (social, RP, B2B) et automatise la préparation des images. Géré par datashake, dans votre charte, validation éditoriale préservée.",finannee:"Fin d'année : dès que votre CMS porte les visuels, le Studio les déploie dans les articles, infographies de baromètres comprises."};
 $("#backlogCards").innerHTML=BACKLOG.map(function(b){return '<div class="bcard"><div class="bt">'+b.t+'</div><div class="bm"><span class="chip '+b.r+'">'+b.rl+'</span><span class="chip sc">score '+b.sc+'</span></div></div>';}).join("");
+var WF_PREC=[
+["La machine interroge chaque semaine les volumes, les tendances et vos trending topics","Chaque sujet entre avec son score de pertinence sur 100, déjà calculé","Vos SEO ajoutent leurs idées : elles sont scorées de la même façon","Le réservoir garde en permanence deux mois de sujets d'avance"],
+["Trente minutes, chaque semaine, avec vos SEO et votre édito","La liste arrive triée par score : on valide le haut, on arbitre les cas limites","Chaque décision est consignée : retenu, écarté, et pourquoi","Le forçage manuel reste possible, et il est tracé"],
+["La machine lit le top 10 réel et les questions posées sur la requête","Title, meta, plan et bloc à retenir arrivent pré-remplis à 70 %","Notre consultant tranche l'angle, vos SEO valident en un seul passage","Un brief validé ne se rediscute plus en cours de route"],
+["Trente jours avant la rédaction : collecte de la donnée qui rendra le contenu impossible à copier","Votre data des annonces + la référence officielle (DVF, ADEME) + le terrain","Pas de preuve disponible : on change de sujet","Jamais de contenu générique"],
+["Un rédacteur spécialisé de la verticale écrit, interviews comprises","L'IA aide à couvrir le sujet et à reformuler : la plume reste humaine","Le texte est mesuré contre le meilleur concurrent actuel","Il ne part en relecture qu'au-dessus du seuil"],
+["Chaque texte est confronté automatiquement à son brief, point par point","Plan couvert, sources citées, maillage posé, charte leboncoin respectée","Un point KO : le texte repart chez le rédacteur, il n'arrive jamais chez vous","Vous validez, vous ne corrigez pas"],
+["Livraison lissée dans la semaine : pas de paquet de dix textes le vendredi","Deux allers-retours maximum, créneaux prévus, relances automatiques","La charge de vos relecteurs est suivie dans le cockpit","Vos retours récurrents enrichissent le référentiel : ils ne reviennent plus"],
+["Un package prêt à coller : chaque champ dans l'ordre exact de votre back-office","Les images déjà redimensionnées aux bons formats","Poussé en ticket vers Jira, Notion ou e-mail structuré","Quand votre nouvel outil arrivera, seule la sortie change"],
+["Baseline posée avant publication, critère de succès écrit dans le brief","Lecture à M+1 et M+3 : atteint, en chemin, ou échec assumé","Un contenu qui décroche redevient automatiquement un sujet du backlog","La ré-optimisation devient un flux, plus un chantier annuel"]];
 var WF_X=[
 {qui:[["La machine, en continu","m"],["Vos 5 SEO : leurs idées entrent au backlog","l"],["Notre veille éditoriale","d"]],
  outils:[["fav-gsc.ico","Search Console","les contenus qui décrochent"],["fav-dataforseo.ico","DataForSEO","volumes et tendances de recherche"],[null,"Vos trending topics","ce que la France cherche chez vous"],[null,"Veille sectorielle","presse, réglementation, saisons"]],
@@ -729,13 +735,12 @@ function wfSelect(s,btn){document.querySelectorAll(".stepbtn").forEach(function(
   var x=WF_X[s.n-1]||{qui:[],outils:[],ex:""};
   var chips=x.qui.map(function(q){return '<span class="wf-chip '+q[1]+'">'+q[0]+'</span>';}).join("");
   var tools=x.outils.map(function(t){var ic=t[0]?'<img src="assets/logos/'+t[0]+'" alt="">':'<span class="sq"></span>';return '<div class="wf-tool">'+ic+'<span><b>'+t[1]+'</b> · '+t[2]+'</span></div>';}).join("");
+  var prec=(WF_PREC[s.n-1]||[]).map(function(t){return '<li>'+t+'</li>';}).join("");
   wfDetail.innerHTML="<h3>Étape "+s.n+" · "+s.nm+(s.accel?' <span class="accel" style="position:static">'+s.accel+'</span>':"")+"</h3><p class='base'>"+s.base+"</p>"+
-    "<div class='rows'><div class='cell auj"+(wfState==="aujourdhui"?" active":"")+"'><b>Aujourd'hui</b>"+s.auj+"</div><div class='cell fin"+(wfState==="finannee"?" active":"")+"'><b>Fin d'année</b>"+s.fin+"</div></div>"+
+    "<div class='wf-lab' style='margin-top:10px'>Concrètement</div><ul class='wf-prec'>"+prec+"</ul>"+
     (x.ex?'<div class="wf-ex"><b>Exemple concret.</b> '+x.ex+'</div>':"");
   wfDetail._c=s;}
-function wfApply(){$("#stateCaption").textContent=CAP[wfState];document.querySelectorAll(".switch.state button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.s===wfState));});if(wfDetail._c){wfSelect(wfDetail._c,document.querySelectorAll(".stepbtn")[wfDetail._c.n-1]);}if(wfStudio)$("#studioText").textContent=STUDIO[wfState];}
-document.querySelectorAll(".switch.state button").forEach(function(b){b.addEventListener("click",function(){wfState=b.dataset.s;wfApply();});});
-document.querySelectorAll(".studio-toggle button").forEach(function(b){b.addEventListener("click",function(){wfStudio=b.dataset.studio==="on";document.querySelectorAll(".studio-toggle button").forEach(function(x){x.setAttribute("aria-pressed",String((x.dataset.studio==="on")===wfStudio));});$("#studioBranch").classList.toggle("on",wfStudio);if(wfStudio)$("#studioText").textContent=STUDIO[wfState];});});
+function wfApply(){if(wfDetail._c){wfSelect(wfDetail._c,document.querySelectorAll(".stepbtn")[wfDetail._c.n-1]);}}
 wfApply();
 
 /* ================= COCKPIT ================= */
