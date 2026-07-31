@@ -19,7 +19,7 @@
   *{box-sizing:border-box;} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:16px;line-height:1.5;}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
   header.app{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:13px 22px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:60;}
-  .brand{font-family:var(--fd);font-weight:700;font-size:15px;} .brand small{display:block;font-weight:400;font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;}
+  .brand{display:flex;align-items:center;gap:12px;} .b-ds{height:18px;display:block;} .b-sep{width:1px;height:22px;background:var(--line);} .b-lbc{height:19px;display:block;} .brand small{font-weight:600;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-left:2px;} @media (prefers-color-scheme:dark){.b-ds{filter:invert(1);}}
   nav.tabs{display:flex;gap:3px;margin-left:auto;flex-wrap:wrap;}
   nav.tabs button{appearance:none;border:1px solid transparent;background:none;color:var(--muted);font:600 12.5px var(--fb);padding:7px 12px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;}
   nav.tabs button:hover{background:var(--surface-2);color:var(--ink);} nav.tabs button[aria-current="true"]{background:var(--ink);color:var(--bg);}
@@ -296,7 +296,7 @@
 </style>
 
 <header class="app">
-  <div class="brand">datashake<small>La Content Factory pour leboncoin</small></div>
+  <div class="brand"><img class="b-ds" src="assets/logos/Logo-Wordmark-Black.svg" alt="datashake"><span class="b-sep"></span><img class="b-lbc" src="assets/logos/leboncoin.png" alt="leboncoin"><small>Content factory</small></div>
   <nav class="tabs" aria-label="Vues">
     <button data-view="wf" aria-current="true">Le workflow</button>
     <button data-view="cockpit">Le cockpit</button>
@@ -313,7 +313,7 @@
   <section class="view active" id="v-wf">
     <p class="eyebrow">Le workflow</p>
     <h2 class="vt">Un workflow qui accélère, où vous piochez, et qui suit votre évolution</h2>
-    <p class="lede">Vous produisez déjà 18 contenus par mois. Ce workflow accélère chaque étape, vous laisse piocher le bon sujet au bon moment dans un backlog vivant, et se reconfigure quand votre CMS et l'accès à votre data évolueront en fin d'année. Même colonne vertébrale, deux états.</p>
+    <p class="lede">Neuf étapes, de la veille à la mesure. Cliquez sur une étape pour voir ce qui s'y passe, et basculez entre aujourd'hui et la fin d'année : même colonne vertébrale, deux états.</p>
     <div class="controls">
       <div class="ctl"><span class="lab">Modularité, faites glisser l'état</span>
         <div class="switch state" role="group"><button data-s="aujourdhui" aria-pressed="true">Aujourd'hui</button><button data-s="finannee" aria-pressed="false">Fin d'année</button></div></div>
@@ -332,7 +332,7 @@
   <section class="view" id="v-cockpit">
     <p class="eyebrow">Le cockpit, source de vérité</p>
     <h2 class="vt">Une base partagée où chaque métier voit ce qui l'attend</h2>
-    <p class="lede">Simulation du cockpit (implémentation Airtable par défaut, portable vers votre outil). Tout le travail SEO est visible dès la grille : title, meta, intention de recherche, bloc à retenir, top source, query fan-out et structure Hn du top 3, les champs marqués <span class="th-api">API</span> étant préparés automatiquement depuis la SERP. Cliquez sur une ligne pour ouvrir la fiche, sur <b>Créer le ticket</b> pour pousser une tâche typée vers votre outil (Jira, Notion, table interne ou e-mail), et sur les onglets <b>Opportunités, Briefs, Pages business, Comités</b> pour découvrir le schéma de chaque table : la base de travail de votre futur Airtable.</p>
+    <p class="lede">La base partagée où chaque métier voit ce qui l'attend, du score au ticket. <b>Cliquez sur une ligne</b> pour ouvrir la fiche, sur <b>Créer le ticket</b> pour pousser le travail vers votre outil (Jira, Notion, e-mail). Les champs marqués <span class="th-api">API</span> sont préparés automatiquement.</p>
     <div class="air">
       <div class="air-top"><span class="air-base">Content Factory leboncoin</span>
         <button class="att on" data-table="assets">Content Assets</button><button class="att" data-table="opp">Opportunités</button><button class="att" data-table="briefs">Briefs</button><button class="att" data-table="pages">Pages business</button><button class="att" data-table="comites">Comités</button></div>
@@ -371,7 +371,7 @@
   <section class="view" id="v-scenarios">
     <p class="eyebrow">Le workflow en situation</p>
     <h2 class="vt">Sept scénarios, déroulés jour par jour</h2>
-    <p class="lede">Le même parcours instancié sur vos produits B2C et B2B, du marronnier à l'urgence réglementaire en 72 h. Le compteur orange suit la charge de votre équipe éditoriale : l'indicateur qui prouve que le goulot est protégé.</p>
+    <p class="lede">Le même parcours, déroulé jour par jour sur vos cas réels : du marronnier à l'urgence réglementaire en 72 h. Le compteur suit la charge de votre équipe éditoriale.</p>
     <div class="selector" id="scSelector"></div>
     <div id="scView"></div>
   </section>
