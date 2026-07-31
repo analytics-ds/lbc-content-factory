@@ -729,7 +729,7 @@ var WF_X=[
  ex:"Un contenu qui décroche redevient automatiquement un sujet du backlog : la ré-optimisation n'est plus un chantier annuel, c'est un flux."}];
 var spine=$("#spine"),wfDetail=$("#wfDetail");
 STEPS.forEach(function(s){var w=document.createElement("div");w.className="step";var b=document.createElement("button");b.className="stepbtn";b.dataset.side=s.side;
-  b.innerHTML='<span class="n">ÉTAPE '+s.n+'</span><span class="nm">'+s.nm+'</span><span class="who '+s.side+'">'+(s.side==="machine"?"machine prépare":s.side==="humain"?"humain décide":"machine + humain")+'</span>'+(s.accel?'<span class="accel">'+s.accel+'</span>':"")+(s.mod?'<span class="mod">reconfigurable</span>':"");
+  b.innerHTML='<span class="n">ÉTAPE '+s.n+'</span><span class="nm">'+s.nm+'</span><span class="who '+s.side+'">'+(s.side==="machine"?"machine prépare":s.side==="humain"?"humain décide":"machine + humain")+'</span>'+(s.accel?'<span class="accel">'+s.accel+'</span>':"");
   b.addEventListener("click",function(){wfSelect(s,b);});w.appendChild(b);spine.appendChild(w);});
 function wfSelect(s,btn){document.querySelectorAll(".stepbtn").forEach(function(x){x.classList.remove("sel");});btn.classList.add("sel");
   var x=WF_X[s.n-1]||{qui:[],outils:[],ex:""};
