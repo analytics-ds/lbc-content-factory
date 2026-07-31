@@ -113,7 +113,7 @@
   .st-pill.opp{background:var(--surface-2);color:var(--muted);} .st-pill.prod{background:var(--machine-soft);color:var(--machine);} .st-pill.conf{background:var(--si-soft);color:var(--si);} .st-pill.val{background:var(--humain-soft);color:var(--humain);} .st-pill.pub{background:var(--ok-soft);color:var(--ok);}
   .cible{font:700 10px var(--fb);letter-spacing:.04em;padding:3px 9px;border-radius:5px;} .cible.B2C{background:var(--machine-soft);color:var(--machine);} .cible.B2B{background:var(--si-soft);color:var(--si);}
   .kwm{font-family:var(--fm);font-size:12px;color:var(--ink-2);} .lk{color:var(--accent);font-weight:600;}
-  .row-tk{appearance:none;cursor:pointer;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font:700 11px var(--fb);padding:5px 11px;border-radius:999px;white-space:nowrap;transition:background .15s;} .row-tk:hover{background:var(--accent);color:var(--accent-ink);}
+  .row-tk{appearance:none;cursor:pointer;border:none;background:var(--ink);color:var(--bg);font:700 11.5px var(--fb);padding:7px 14px;border-radius:999px;white-space:nowrap;transition:background .15s,transform .1s;} .row-tk:hover{background:var(--accent);color:var(--accent-ink);transform:translateY(-1px);}
   .air-note{font-size:12.5px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line);background:var(--surface-2);}
 
   /* ===== INTEGRATIONS ===== */
@@ -198,6 +198,9 @@
   /* cycle de vie : créer / optimiser + dates */
   .ta-pill{display:inline-flex;align-items:center;gap:5px;font:700 10.5px var(--fb);letter-spacing:.03em;text-transform:uppercase;padding:3px 10px;border-radius:999px;white-space:nowrap;}
   .ta-pill.creer{background:var(--ok-soft);color:var(--ok);} .ta-pill.optimiser{background:var(--accent-soft);color:var(--accent);}
+  .ta-legend{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--ink-2);background:var(--surface);}
+  .ta-legend b{color:var(--ink);}
+  .tl-sep{width:1px;height:16px;background:var(--line);margin:0 4px;}
   .url-ex{display:block;font:500 10.5px var(--fm);color:var(--muted);margin-top:3px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .date-v{font:600 12.5px var(--fm);font-variant-numeric:tabular-nums;white-space:nowrap;}
   .date-src{display:block;font:500 9.5px var(--fb);color:var(--muted);margin-top:2px;}
@@ -333,7 +336,7 @@
   <section class="view" id="v-cockpit">
     <p class="eyebrow">Le cockpit, source de vérité</p>
     <h2 class="vt">Une base partagée où chaque métier voit ce qui l'attend</h2>
-    <p class="lede">La base partagée où chaque métier voit ce qui l'attend, du score au ticket. <b>Cliquez sur une ligne</b> pour ouvrir la fiche, sur <b>Créer le ticket</b> pour pousser le travail vers votre outil (Jira, Notion, e-mail). Les champs marqués <span class="th-api">API</span> sont préparés automatiquement.</p>
+    <p class="lede">La base partagée où chaque métier voit ce qui l'attend, du score au ticket. <b>Cliquez sur une ligne</b> pour ouvrir la fiche, sur <b>Créer le brief</b> pour pousser le travail vers votre outil (Jira, Notion, e-mail). Les champs marqués <span class="th-api">API</span> sont préparés automatiquement.</p>
     <div class="air">
       <div class="air-top"><span class="air-base">Content Factory leboncoin</span>
         <button class="att on" data-table="assets">Content Assets</button><button class="att" data-table="opp">Opportunités</button><button class="att" data-table="briefs">Briefs</button><button class="att" data-table="pages">Pages business</button><button class="att" data-table="comites">Comités</button></div>
@@ -346,8 +349,9 @@
         <button data-v="prod" aria-pressed="false">datashake · production</button>
         <button data-v="pub" aria-pressed="false">À publier</button></div>
       <div class="air-tools" id="airTools"><span id="airStats" style="display:contents"></span><span class="fgroup" id="fRub"></span><span class="fgroup" id="fCible"></span></div>
+      <div class="ta-legend"><span class="ta-pill creer">À créer</span><span>une trend détectée : <b>une nouvelle URL</b> entre au plan éditorial</span><span class="tl-sep"></span><span class="ta-pill optimiser">À optimiser</span><span>on part de <b>l'existant</b> : la page est remise à niveau, sans repartir de zéro</span></div>
       <div class="air-gridwrap"><table class="airgrid"><thead id="airHead"></thead><tbody id="airBody"></tbody></table></div>
-      <div class="air-note">Le bouton « Créer le ticket » est contextuel : le type de ticket et sa destination dépendent du statut de la ligne. Le bouton « + » déplie les sujets associés du cluster. Données d'exemple.</div>
+      <div class="air-note">Le bouton « Créer le brief » est contextuel : le type de ticket et sa destination dépendent du statut de la ligne. Le bouton « + » déplie les sujets associés du cluster. Données d'exemple.</div>
     </div>
     <div class="matrice">
       <h4>La matrice de priorisation derrière le score</h4>
@@ -732,16 +736,16 @@ fanout:{h:'Query fan-out <span class="th-api">API</span>',r:function(r){var f=r.
 hn:{h:'Structure Hn <span class="th-api">API</span>',r:function(r){var h=r.hn||[];var h3=h.reduce(function(a,b){return a+((b.h3||[]).length);},0);return '<td class="cw-hn"><div class="hn-mini"><b>'+h.length+' H2 · '+h3+' H3 (top 3)</b><div class="clamp2">'+(h[0]?h[0].h2:"")+(h[1]?' · '+h[1].h2:"")+'</div></div></td>';}},
 resp:{h:"Owner",r:function(r){return '<td><span class="owner"><span class="av">'+initiales(r.resp)+'</span>'+r.resp+'</span></td>';}},
 ech:{h:"Échéance",r:function(r){return '<td>'+(r.ech||"·")+'</td>';}},
-typeAction:{h:"À créer / à optimiser",r:function(r){var opt=r.typeAction==="optimiser";return '<td><span class="ta-pill '+r.typeAction+'">'+(opt?"À optimiser":"À créer")+'</span>'+(opt&&r.urlEx?'<span class="url-ex">'+r.urlEx+'</span>':"")+'</td>';}},
+typeAction:{h:"À créer / à optimiser",r:function(r){var opt=r.typeAction==="optimiser";return '<td><span class="ta-pill '+r.typeAction+'">'+(opt?"À optimiser":"À créer")+'</span>'+(opt?(r.urlEx?'<span class="url-ex">'+r.urlEx+'</span>':""):'<span class="url-ex">nouvelle URL · trend détectée</span>')+'</td>';}},
 majDate:{h:'Dernière MAJ du contenu <span class="th-api">API</span>',r:function(r){return '<td>'+(r.majDate?'<span class="date-v">'+r.majDate+'</span><span class="date-src">scrapée : '+r.majSrc+'</span>':"·")+'</td>';}},
 reoptDate:{h:"Ré-optimisation (M+6)",r:function(r){if(!r.reoptDate)return "<td>·</td>";var late=dParse(r.reoptDate)<AUJ;return '<td><span class="date-v">'+r.reoptDate+'</span>'+(late?'<span class="late">échue</span>':"")+'</td>';}},
 briefDate:{h:"Brief créé le",r:function(r){return '<td>'+(r.briefDate?'<span class="date-v">'+r.briefDate+'</span>':"·")+'</td>';}},
 livraisonDate:{h:"Livraison le",r:function(r){return '<td>'+(r.livraisonDate?'<span class="date-v">'+r.livraisonDate+'</span>':"·")+'</td>';}},
 serpEl:{h:'Éléments attendus (SERP) <span class="th-api">API</span>',r:function(r){var s=r.serpEl||[];return '<td class="cw-serp"><div class="mini-fan">'+s.slice(0,2).map(function(x){return '<span class="mf">'+x+'</span>';}).join("")+(s.length>2?'<span class="plusn">+'+(s.length-2)+'</span>':"")+'</div></td>';}},
-tk:{h:"Action",r:function(r,i){return '<td><button class="row-tk" data-i="'+i+'">Créer le ticket</button></td>';}}};
+tk:{h:"Action",r:function(r,i){return '<td><button class="row-tk" data-i="'+i+'">Créer le brief</button></td>';}}};
 var DEST={jira:"Jira",notion:"Notion",interne:"Table interne",email:"E-mail structuré"};
 var airHead=$("#airHead"),airBody=$("#airBody");
-var TIPS={t:"Identifiant lisible de la fiche. Le bouton + déplie les sujets associés du cluster ; cliquez sur la ligne pour la fiche complète.",vol:"Search volume mensuel du mot-clé prioritaire (via API SEO).",score:"Score de priorité /100 : volume + intention + page business + faisabilité + trafic protégé (AIO) + bonus d'ancienneté (un contenu ancien remonte). Survolez pour la décomposition. Le score trie, le comité décide.",kw:"Le mot-clé prioritaire, fourni ou validé par l'équipe SEO leboncoin (le quoi).",cible:"B2C (leboncoin.fr) ou B2B (Solutions Pro, Publicité).",rub:"La rubrique ou le site de publication.",typeAction:"À créer (le contenu n'existe pas) ou à optimiser (contenu existant, URL affichée).",st:"Le statut dans le cycle : de l'opportunité au verdict à 90 jours.",title:"Balise title proposée (55-65 caractères), finalisée par le consultant.",meta:"Meta description proposée (140-158 caractères), incitative.",intention:"Déduite du top 3 de la SERP via API : ce que l'internaute cherche vraiment.",bloc:"Les faits saillants extractibles (encadré À retenir), exigence GEO.",topSource:"Les sources d'autorité que le top 3 cite sur ce mot-clé : à citer dans le contenu.",fanout:"Requêtes connexes catégorisées à couvrir, générées depuis la SERP via API.",hn:"Structure H2/H3 synthétisée du top 3, scrapée via API.",serpEl:"Les éléments hors texte que la SERP attend (tableau, simulateur, photos...), à prévoir au brief.",majDate:"Date de dernière mise à jour du contenu existant, scrapée (schema dateModified ou date visible on-site).",reoptDate:"Ré-optimisation par défaut : dernière MAJ + 6 mois. Badge « échue » si dépassée.",briefDate:"Date de création du brief, au format JJ/MM/AAAA.",livraisonDate:"Date de livraison du contenu, au format JJ/MM/AAAA.",resp:"Qui a la main en ce moment : la donnée qui tue les temps morts.",tk:"Pousse un ticket de production complet (13 champs) vers votre outil : Jira, Notion, table interne ou e-mail."};
+var TIPS={t:"Identifiant lisible de la fiche. Le bouton + déplie les sujets associés du cluster ; cliquez sur la ligne pour la fiche complète.",vol:"Search volume mensuel du mot-clé prioritaire (via API SEO).",score:"Score de priorité /100 : volume + intention + page business + faisabilité + trafic protégé (AIO) + bonus d'ancienneté (un contenu ancien remonte). Survolez pour la décomposition. Le score trie, le comité décide.",kw:"Le mot-clé prioritaire, fourni ou validé par l'équipe SEO leboncoin (le quoi).",cible:"B2C (leboncoin.fr) ou B2B (Solutions Pro, Publicité).",rub:"La rubrique ou le site de publication.",typeAction:"À créer (le contenu n'existe pas) ou à optimiser (contenu existant, URL affichée).",st:"Le statut dans le cycle : de l'opportunité au verdict à 90 jours.",title:"Balise title proposée (55-65 caractères), finalisée par le consultant.",meta:"Meta description proposée (140-158 caractères), incitative.",intention:"Déduite du top 3 de la SERP via API : ce que l'internaute cherche vraiment.",bloc:"Les faits saillants extractibles (encadré À retenir), exigence GEO.",topSource:"Les sources d'autorité que le top 3 cite sur ce mot-clé : à citer dans le contenu.",fanout:"Requêtes connexes catégorisées à couvrir, générées depuis la SERP via API.",hn:"Structure H2/H3 synthétisée du top 3, scrapée via API.",serpEl:"Les éléments hors texte que la SERP attend (tableau, simulateur, photos...), à prévoir au brief.",majDate:"Date de dernière mise à jour du contenu existant, scrapée (schema dateModified ou date visible on-site).",reoptDate:"Ré-optimisation par défaut : dernière MAJ + 6 mois. Badge « échue » si dépassée.",briefDate:"Date de création du brief, au format JJ/MM/AAAA.",livraisonDate:"Date de livraison du contenu, au format JJ/MM/AAAA.",resp:"Qui a la main en ce moment : la donnée qui tue les temps morts.",tk:"Génère le brief complet (13 champs) et le pousse vers votre outil : Jira, Notion, table interne ou e-mail."};
 var fRubV=null,fCibleV=null,curView="grille";
 function matchF(r){return (!fRubV||r.rub===fRubV)&&(!fCibleV||r.cible===fCibleV);}
 function renderCockpit(vk){curView=vk;var v=CVIEWS[vk];airHead.innerHTML="<tr>"+v.cols.map(function(c){return '<th title="'+(TIPS[c]||"")+'">'+COLS[c].h+"</th>";}).join("")+"</tr>";
@@ -800,7 +804,7 @@ function openFiche(r){
       "<div class='cell'><b>Query fan-out</b><div class='fan-chips'>"+fan+"</div></div>"+
       "<div class='cell'><b>Éléments attendus sur la page (analyse SERP)</b><div class='fan-chips'>"+(r.serpEl||[]).map(function(x){return '<span class="fan">'+x+'</span>';}).join("")+"</div><span class='date-src'>Ce que le top 3 propose au-delà du texte : à prévoir dans le brief</span></div>"+
       "<div class='cell'><b>Structure Hn (scrapée du top 3)</b><div class='hn-outline'>"+hn+"</div></div></div>"+
-    "<div class='fiche-foot'><button class='row-tk' id='ficheTk'>Créer le ticket</button><span class='fictif'>Fiche Content Asset, données d'exemple. Les champs SERP sont pré-remplis par le workflow, l'expert valide et enrichit.</span></div>"
+    "<div class='fiche-foot'><button class='row-tk' id='ficheTk'>Créer le brief</button><span class='fictif'>Fiche Content Asset, données d'exemple. Les champs SERP sont pré-remplis par le workflow, l'expert valide et enrichit.</span></div>"
   );
   var tb=document.getElementById("ficheTk");if(tb)tb.addEventListener("click",function(){openTicket(r);});
 }
