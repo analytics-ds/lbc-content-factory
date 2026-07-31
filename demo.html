@@ -65,16 +65,20 @@
   .chip.immo{background:var(--machine-soft);color:var(--machine);} .chip.auto{background:var(--accent-soft);color:var(--accent);} .chip.conso{background:var(--ok-soft);color:var(--ok);} .chip.b2b{background:var(--si-soft);color:var(--si);} .chip.sc{background:transparent;color:var(--muted);border:1px solid var(--line);font-variant-numeric:tabular-nums;}
   .flow-down{text-align:center;color:var(--muted);font-size:20px;margin:2px 0;}
   .spine-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);}
-  .spine{display:grid;grid-template-columns:repeat(3,minmax(200px,1fr));grid-template-rows:34px repeat(9,50px);gap:8px 12px;padding:16px 18px 18px;position:relative;max-width:880px;}
-  .lanebg{border-radius:10px;grid-row:2/11;z-index:0;}
-  .lanebg.m{grid-column:1;background:var(--machine-soft);} .lanebg.x{grid-column:2;background:var(--surface-2);} .lanebg.h{grid-column:3;background:var(--humain-soft);}
-  .lanelab{z-index:1;grid-row:1;display:flex;align-items:center;justify-content:center;font:600 10.5px var(--fd);letter-spacing:.06em;text-transform:uppercase;line-height:1.2;}
-  .lanelab.m{grid-column:1;color:var(--machine);} .lanelab.x{grid-column:2;color:var(--muted);} .lanelab.h{grid-column:3;color:var(--humain);}
+  .spine{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 18px 18px;max-width:720px;}
+  .lanelab{display:none;}
+  .lanebg{display:none;}
+  .wf-key{display:flex;gap:16px;flex-wrap:wrap;padding:0 18px 2px;margin-top:-2px;}
+  .wf-key span{display:inline-flex;align-items:center;gap:7px;font:600 11px var(--fb);color:var(--muted);}
+  .wf-key i{width:10px;height:10px;border-radius:3px;display:block;}
   .stepbtn{appearance:none;text-align:left;cursor:pointer;font-family:var(--fb);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;transition:border-color .15s,box-shadow .15s,transform .12s;z-index:1;position:relative;}
   .stepbtn:hover{transform:translateY(-2px);box-shadow:var(--shadow);} .stepbtn.sel{border-color:var(--ink);box-shadow:var(--shadow);border-width:2px;}
-  .stepbtn{display:flex;align-items:center;gap:9px;padding:7px 12px;}
-  .stepbtn .n{font:700 12px var(--fd);color:var(--muted);}
-  .stepbtn .nm{font:600 12.5px/1.2 var(--fd);}
+  .stepbtn{display:block;padding:12px 13px 13px;min-height:76px;}
+  .stepbtn .n{display:flex;align-items:center;gap:7px;font:700 10px var(--fb);letter-spacing:.06em;color:var(--muted);margin-bottom:5px;}
+  .stepbtn .n i{width:9px;height:9px;border-radius:3px;display:block;}
+  .stepbtn .nm{display:block;font:600 13.5px/1.25 var(--fd);}
+  .stepbtn.sel{background:var(--ink);}
+  .stepbtn.sel .nm{color:var(--bg);} .stepbtn.sel .n{color:rgba(255,255,255,.6);}
   .step .n{font:700 10px var(--fm);color:var(--muted);} .step .nm{display:block;font:700 13.5px/1.2 var(--fd);margin:3px 0 8px;}
   .step .who{font:600 9.5px var(--fb);letter-spacing:.04em;text-transform:uppercase;} .who.machine{color:var(--machine);} .who.humain{color:var(--humain);} .who.mixte{color:var(--muted);}
   .step .accel{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:700 9.5px var(--fb);letter-spacing:.03em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 8px;}
@@ -749,13 +753,12 @@ var WF_X=[
  ex:"Un contenu qui décroche redevient automatiquement un sujet du backlog : la ré-optimisation n'est plus un chantier annuel, c'est un flux."}];
 var spine=$("#spine"),wfDetail=$("#wfDetail");
 (function(){
-  ["m","x","h"].forEach(function(k){var d=document.createElement("div");d.className="lanebg "+k;spine.appendChild(d);});
-  var labs=[["m","La machine prépare"],["x","Machine + humain"],["h","Vous décidez"]];
-  labs.forEach(function(l){var d=document.createElement("div");d.className="lanelab "+l[0];d.textContent=l[1];spine.appendChild(d);});
-  var ROW={machine:1,mixte:2,humain:3};
+  var COL={machine:"var(--machine)",mixte:"var(--wire)",humain:"var(--humain)"};
+  var kw=document.createElement("div");kw.className="wf-key";
+  kw.innerHTML='<span><i style="background:var(--machine)"></i>La machine prépare</span><span><i style="background:var(--wire)"></i>Machine + humain</span><span><i style="background:var(--humain)"></i>Vous décidez</span>';
+  spine.parentNode.insertBefore(kw,spine.nextSibling);
   STEPS.forEach(function(s){var b=document.createElement("button");b.className="stepbtn";b.dataset.side=s.side;
-    b.style.gridColumn=String(ROW[s.side]);b.style.gridRow=String(s.n+1);
-    b.innerHTML='<span class="n">'+s.n+'</span><span class="nm">'+s.nm+'</span>';
+    b.innerHTML='<span class="n"><i style="background:'+COL[s.side]+'"></i>ÉTAPE '+s.n+'</span><span class="nm">'+s.nm+'</span>';
     b.addEventListener("click",function(){wfSelect(s,b);});spine.appendChild(b);});
 })();
 function wfSelect(s,btn){document.querySelectorAll(".stepbtn").forEach(function(x){x.classList.remove("sel");});btn.classList.add("sel");
