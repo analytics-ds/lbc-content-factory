@@ -758,7 +758,7 @@ meta:{h:"Meta description",r:function(r){return '<td class="cw-meta"><div class=
 intention:{h:'Intention SERP <span class="th-api">API</span>',r:function(r){var i=r.intention.indexOf(".");var typ=i>0?r.intention.slice(0,i):"";var rest=i>0?r.intention.slice(i+1).trim():r.intention;return '<td class="cw-int">'+(typ?'<span class="int-type">'+typ+'</span>':"")+'<div class="clamp2">'+rest+'</div></td>';}},
 bloc:{h:"Bloc à retenir",r:function(r){var b=r.blocRetenir||[];return '<td class="cw-bloc"><div class="clamp2">• '+(b[0]||"")+'</div>'+(b.length>1?'<span class="plusn">+'+(b.length-1)+' points</span>':"")+'</td>';}},
 topSource:{h:'Top source <span class="th-api">API</span>',r:function(r){return '<td class="cw-src"><div class="clamp2">'+r.topSource+'</div></td>';}},
-fanout:{h:'Query fan-out <span class="th-api">API</span>',r:function(r){var f=r.fanout||[];return '<td class="cw-fan"><div class="mini-fan">'+f.slice(0,2).map(function(q){return '<span class="mf">'+q+'</span>';}).join("")+(f.length>2?'<span class="plusn">+'+(f.length-2)+'</span>':"")+'</div></td>';}},
+fanout:{h:'Questions à couvrir <span class="th-api">API</span>',r:function(r){var f=r.fanout||[];return '<td class="cw-fan"><div class="mini-fan">'+f.slice(0,2).map(function(q){return '<span class="mf">'+q+'</span>';}).join("")+(f.length>2?'<span class="plusn">+'+(f.length-2)+'</span>':"")+'</div></td>';}},
 hn:{h:'Structure Hn <span class="th-api">API</span>',r:function(r){var h=r.hn||[];var h3=h.reduce(function(a,b){return a+((b.h3||[]).length);},0);return '<td class="cw-hn"><div class="hn-mini"><b>'+h.length+' H2 · '+h3+' H3 (top 3)</b><div class="clamp2">'+(h[0]?h[0].h2:"")+(h[1]?' · '+h[1].h2:"")+'</div></div></td>';}},
 resp:{h:"Owner",r:function(r){return '<td><span class="owner"><span class="av">'+initiales(r.resp)+'</span>'+r.resp+'</span></td>';}},
 ech:{h:"Échéance",r:function(r){return '<td>'+(r.ech||"·")+'</td>';}},
@@ -827,7 +827,7 @@ function openFiche(r){
     "<div class='fiche-sec serp'><div class='sec-h'>Préparé automatiquement depuis le top 3 SERP <span class='api-badge'>via API</span></div>"+
       "<div class='cell'><b>Intention de recherche (top 3)</b>"+r.intention+"</div>"+
       "<div class='cell'><b>Top source sur le mot-clé</b>"+r.topSource+"</div>"+
-      "<div class='cell'><b>Query fan-out</b><div class='fan-chips'>"+fan+"</div></div>"+
+      "<div class='cell'><b>Questions à couvrir</b><div class='fan-chips'>"+fan+"</div></div>"+
       "<div class='cell'><b>Éléments attendus sur la page (analyse SERP)</b><div class='fan-chips'>"+(r.serpEl||[]).map(function(x){return '<span class="fan">'+x+'</span>';}).join("")+"</div><span class='date-src'>Ce que le top 3 propose au-delà du texte : à prévoir dans le brief</span></div>"+
       "<div class='cell'><b>Structure Hn (scrapée du top 3)</b><div class='hn-outline'>"+hn+"</div></div></div>"+
     "<div class='fiche-foot'><button class='row-tk' id='ficheTk'>Créer le brief</button><span class='fictif'>Fiche Content Asset, données d'exemple. Les champs SERP sont pré-remplis par le workflow, l'expert valide et enrichit.</span></div>"
@@ -889,7 +889,7 @@ function ticketHTML(r,dest){var d=dest||r.tk.dest;
   "<div class='fld'><b>Meta description</b>"+r.meta+"</div>"+
   "<div class='fld'><b>Intention SERP</b>"+r.intention+"</div>"+
   "<div class='fld'><b>Structure Hn (top 3)</b>"+(r.hn||[]).map(function(b){return b.h2;}).join(" · ")+"</div>"+
-  "<div class='fld'><b>Query fan-out à couvrir</b>"+(r.fanout||[]).join(" · ")+"</div>"+
+  "<div class='fld'><b>Questions à couvrir</b>"+(r.fanout||[]).join(" · ")+"</div>"+
   "<div class='fld'><b>Top sources à citer</b>"+r.topSource+"</div>"+
   "<div class='fld'><b>Bloc à retenir ("+(r.blocRetenir||[]).length+" points)</b>"+(r.blocRetenir&&r.blocRetenir[0]?r.blocRetenir[0]+(r.blocRetenir.length>1?" (+"+(r.blocRetenir.length-1)+")":""):"")+"</div>"+
   "<div class='fld'><b>Éléments attendus sur la page (SERP)</b>"+(r.serpEl||[]).join(" · ")+"</div>"+
@@ -951,7 +951,7 @@ briefs:{nom:"Briefs",
  ["Mot-clé prioritaire et secondaires","Texte","Fournis ou validés par vos SEO"],
  ["Intention SERP","Texte · API","Déduite du top 3 : ce que cherche vraiment l'internaute"],
  ["Structure Hn proposée","Texte long · API","Scrapée du top 3, finalisée par le consultant"],
- ["Query fan-out","Sélections multiples · API","Les requêtes connexes catégorisées à couvrir"],
+ ["Questions à couvrir","Sélections multiples · API","Les requêtes connexes catégorisées à couvrir"],
  ["Top sources","Texte · API","Les sources d'autorité que le top 3 cite sur ce mot-clé"],
  ["Exigences GEO","Cases à cocher","Réponse factuelle en tête, encadré À retenir, FAQ, entités, données chiffrées"],
  ["Recommandations Schema","Texte","Article, FAQPage, auteur, dans la limite du back office"],
