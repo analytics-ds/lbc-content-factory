@@ -101,7 +101,7 @@
   .air-top{display:flex;align-items:flex-end;gap:2px;padding:10px 14px 0;border-bottom:1px solid var(--line);background:var(--surface-2);flex-wrap:wrap;}
   .air-base{font:700 13px var(--fd);padding:0 12px 10px 4px;}
   .att{appearance:none;border:1px solid var(--line);border-bottom:none;background:var(--surface);color:var(--muted);font:600 12px var(--fb);padding:7px 13px;border-radius:8px 8px 0 0;cursor:default;} .att.on{color:var(--ink);font-weight:700;border-color:var(--accent);}
-  .air-views{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap;align-items:center;}
+  .air-views{display:flex;gap:6px;padding:8px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap;align-items:center;}
   .air-views .vlabel{font:700 10.5px var(--fb);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px;}
   .air-views button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:600 12px var(--fb);padding:6px 12px;border-radius:999px;cursor:pointer;transition:background .15s;}
   .air-views button:hover{background:var(--surface-2);} .air-views button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);}
@@ -203,7 +203,7 @@
   /* cycle de vie : créer / optimiser + dates */
   .ta-pill{display:inline-flex;align-items:center;gap:5px;font:700 10.5px var(--fb);letter-spacing:.03em;text-transform:uppercase;padding:3px 10px;border-radius:999px;white-space:nowrap;}
   .ta-pill.creer{background:var(--ok-soft);color:var(--ok);} .ta-pill.optimiser{background:var(--accent-soft);color:var(--accent);}
-  .ta-legend{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--ink-2);background:var(--surface);}
+  .ta-inline{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);}
   .ta-legend b{color:var(--ink);}
   .tl-sep{width:1px;height:16px;background:var(--line);margin:0 4px;}
   .url-ex{display:block;font:500 10.5px var(--fm);color:var(--muted);margin-top:3px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -231,10 +231,10 @@
   .mx-crit{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;} .mx{border:1px solid var(--line);border-radius:8px;background:var(--surface-2);padding:9px 12px;font-size:12px;color:var(--ink-2);} .mx b{display:block;font:700 11.5px var(--fd);color:var(--ink);margin-bottom:2px;}
   .mx-read{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;} .mx-read span{font:600 11px var(--fb);border-radius:999px;padding:3px 11px;}
   /* cockpit : stats + filtres */
-  .air-tools{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface);}
+  .air-tools{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--surface);}
   .stat-mini{display:inline-flex;align-items:baseline;gap:6px;font:600 12px var(--fb);color:var(--ink-2);}
   .stat-mini b{font:700 16px var(--fd);font-variant-numeric:tabular-nums;color:var(--ink);}
-  .stat-mini.opt b{color:var(--accent);} .stat-mini.late b{color:var(--accent);}
+  .stat-mini.opt b{color:var(--accent);} .stat-mini.st-late b{color:var(--accent);}
   .fgroup{display:inline-flex;gap:4px;align-items:center;} .fgroup .flab{font:700 9.5px var(--fb);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-right:2px;}
   .fchip{appearance:none;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:600 11px var(--fb);padding:4px 10px;border-radius:999px;transition:background .15s;}
   .fchip:hover{background:var(--surface-2);} .fchip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);}
@@ -352,9 +352,9 @@
         <button data-v="edito" aria-pressed="false">Édito · ma file</button>
         <button data-v="seo" aria-pressed="false">SEO · à qualifier & briefs</button>
         <button data-v="prod" aria-pressed="false">datashake · production</button>
-        <button data-v="pub" aria-pressed="false">À publier</button></div>
-      <div class="air-tools" id="airTools"><span id="airStats" style="display:contents"></span><span class="fgroup" id="fRub"></span><span class="fgroup" id="fCible"></span></div>
-      <div class="ta-legend"><span class="ta-pill creer">À créer</span><span>une trend détectée : <b>une nouvelle URL</b> entre au plan éditorial</span><span class="tl-sep"></span><span class="ta-pill optimiser">À optimiser</span><span>on part de <b>l'existant</b> : la page est remise à niveau, sans repartir de zéro</span></div>
+        <button data-v="pub" aria-pressed="false">À publier</button><span class="fgroup" id="fRub" style="margin-left:auto"></span><span class="fgroup" id="fCible"></span></div>
+      <div class="air-tools" id="airTools"><span id="airStats" style="display:contents"></span><span class="tl-sep"></span><span class="ta-inline"><span class="ta-pill creer">À créer</span> nouvelle URL, trend détectée</span><span class="ta-inline"><span class="ta-pill optimiser">À optimiser</span> on part de l'existant</span></div>
+      
       <div class="air-gridwrap"><table class="airgrid"><thead id="airHead"></thead><tbody id="airBody"></tbody></table></div>
       <div class="air-note">Le bouton « Créer le brief » est contextuel : le type de ticket et sa destination dépendent du statut de la ligne. Le bouton « + » déplie les sujets associés du cluster. Données d'exemple.</div>
     </div>
@@ -833,7 +833,7 @@ document.querySelectorAll("#airViews button").forEach(function(b){b.addEventList
     '<span class="stat-mini"><b>'+RECS.length+'</b> fiches</span>'+
     '<span class="stat-mini"><b>'+(RECS.length-nOpt)+'</b> à créer</span>'+
     '<span class="stat-mini opt"><b>'+nOpt+'</b> à optimiser</span>'+
-    '<span class="stat-mini late"><b>'+nLate+'</b> ré-optim. échues</span>'+
+    '<span class="stat-mini st-late"><b>'+nLate+'</b> ré-optim. échues</span>'+
     '<span class="stat-mini"><b>'+nPub+'</b> publiés / à publier</span>';
   var RUBS=[["","Toutes"],["immo","Immo"],["auto","Auto"],["conso","Conso"],["b2b","B2B vertical"]];
   var CIBLES=[["","Toutes"],["B2C","B2C"],["B2B","B2B"]];
