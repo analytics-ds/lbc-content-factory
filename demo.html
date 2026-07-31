@@ -732,7 +732,6 @@ function wfSelect(s,btn){document.querySelectorAll(".stepbtn").forEach(function(
   var chips=x.qui.map(function(q){return '<span class="wf-chip '+q[1]+'">'+q[0]+'</span>';}).join("");
   var tools=x.outils.map(function(t){var ic=t[0]?'<img src="assets/logos/'+t[0]+'" alt="">':'<span class="sq"></span>';return '<div class="wf-tool">'+ic+'<span><b>'+t[1]+'</b> · '+t[2]+'</span></div>';}).join("");
   wfDetail.innerHTML="<h3>Étape "+s.n+" · "+s.nm+(s.accel?' <span class="accel" style="position:static">'+s.accel+'</span>':"")+"</h3><p class='base'>"+s.base+"</p>"+
-    '<div class="wf-meta"><div><div class="wf-lab">Qui intervient</div>'+chips+'</div><div><div class="wf-lab">Avec quoi</div>'+tools+'</div></div>'+
     "<div class='rows'><div class='cell auj"+(wfState==="aujourdhui"?" active":"")+"'><b>Aujourd'hui</b>"+s.auj+"</div><div class='cell fin"+(wfState==="finannee"?" active":"")+"'><b>Fin d'année</b>"+s.fin+"</div></div>"+
     (x.ex?'<div class="wf-ex"><b>Exemple concret.</b> '+x.ex+'</div>':"");
   wfDetail._c=s;}
