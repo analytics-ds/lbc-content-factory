@@ -595,7 +595,7 @@ var inited={};
 
 /* ---------- NAV ---------- */
 var tabs=document.querySelectorAll("nav.tabs button");
-var VIEWS={wf:"v-wf",cockpit:"v-cockpit",blueprint:"v-blueprint",integ:"v-integ",chantiers:"v-chantiers",scenarios:"v-scenarios",metiers:"v-metiers"};
+var VIEWS={wf:"v-wf",cockpit:"v-cockpit",scenarios:"v-scenarios"};
 tabs.forEach(function(t){t.addEventListener("click",function(){
   Object.values(VIEWS).forEach(function(id){document.getElementById(id).classList.remove("active");});
   document.getElementById(VIEWS[t.dataset.view]).classList.add("active");
