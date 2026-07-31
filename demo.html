@@ -118,6 +118,39 @@
   .st-pill.opp{background:var(--surface-2);color:var(--muted);} .st-pill.prod{background:var(--machine-soft);color:var(--machine);} .st-pill.conf{background:var(--si-soft);color:var(--si);} .st-pill.val{background:var(--humain-soft);color:var(--humain);} .st-pill.pub{background:var(--ok-soft);color:var(--ok);}
   .cible{font:700 10px var(--fb);letter-spacing:.04em;padding:3px 9px;border-radius:5px;} .cible.B2C{background:var(--machine-soft);color:var(--machine);} .cible.B2B{background:var(--si-soft);color:var(--si);}
   .kwm{font-family:var(--fm);font-size:12px;color:var(--ink-2);} .lk{color:var(--accent);font-weight:600;}
+  /* brief : generation + document */
+  .modal .card.wide{max-width:860px;}
+  .b-load{padding:26px 6px;display:flex;flex-direction:column;gap:14px;min-width:420px;}
+  .b-load h3{margin:0 0 2px;font:700 17px var(--fd);}
+  .b-step{display:flex;align-items:center;gap:11px;font-size:13.5px;color:var(--muted);transition:color .3s;}
+  .b-step .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;transition:all .3s;}
+  .b-step.run{color:var(--ink);} .b-step.run .dot{border-color:var(--accent);border-top-color:transparent;animation:bspin .7s linear infinite;}
+  .b-step.done{color:var(--ink);} .b-step.done .dot{border-color:var(--ok);background:var(--ok);animation:none;}
+  .b-step.done .dot::after{content:"";position:absolute;left:5px;top:2px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+  @keyframes bspin{to{transform:rotate(360deg);}}
+  .b-kick{font:700 10.5px var(--fb);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .b-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin:4px 0 2px;}
+  .b-head h3{margin:0;font:700 20px var(--fd);}
+  .b-score{font:700 15px var(--fd);background:var(--ink);color:var(--bg);border-radius:9px;padding:6px 11px;white-space:nowrap;}
+  .b-meta{display:flex;gap:8px 18px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin:8px 0 2px;}
+  .b-meta b{color:var(--ink);}
+  .b-lab{font:700 10px var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:16px 0 7px;display:flex;align-items:center;gap:7px;}
+  .b-lab .th-api{margin-left:0;}
+  .serp-prev{border:1px solid var(--line);border-radius:10px;padding:13px 16px;background:var(--surface);}
+  .serp-prev .sp-u{font-size:11.5px;color:var(--ok);margin-bottom:2px;}
+  .serp-prev .sp-t{font:600 16px var(--fb);color:#1a0dab;margin-bottom:3px;}
+  .serp-prev .sp-m{font-size:12.5px;color:var(--ink-2);max-width:64ch;}
+  @media (prefers-color-scheme:dark){.serp-prev .sp-t{color:#8ab4f8;}}
+  .b-ret{background:var(--surface-2);border-left:3px solid #FFFF7D;border-radius:8px;padding:11px 15px;}
+  .b-ret li{font-size:13px;color:var(--ink-2);margin:0 0 5px 16px;}
+  .b-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 22px;} @media (max-width:640px){.b-cols{grid-template-columns:1fr;}}
+  .b-src{font-size:12.5px;color:var(--ink-2);}
+  .b-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .b-push{appearance:none;cursor:pointer;border:none;background:var(--ink);color:var(--bg);font:700 13px var(--fb);padding:10px 18px;border-radius:999px;transition:background .15s;}
+  .b-push:hover{background:var(--accent);color:var(--accent-ink);}
+  .b-push.ok{background:var(--ok);color:#fff;cursor:default;}
+  .b-tklink{appearance:none;border:none;background:none;cursor:pointer;font:600 12px var(--fb);color:var(--muted);text-decoration:underline;text-underline-offset:3px;}
+  .b-tklink:hover{color:var(--ink);}
   .row-tk{appearance:none;cursor:pointer;border:none;background:var(--ink);color:var(--bg);font:700 11.5px var(--fb);padding:7px 14px;border-radius:999px;white-space:nowrap;transition:background .15s,transform .1s;} .row-tk:hover{background:var(--accent);color:var(--accent-ink);transform:translateY(-1px);}
   .air-note{font-size:12.5px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line);background:var(--surface-2);}
 
@@ -761,7 +794,7 @@ function renderCockpit(vk){curView=vk;var v=CVIEWS[vk];airHead.innerHTML="<tr>"+
       tr=tr.nextElementSibling;}
     if(!open){/* réouverture : remettre les exp-btn à + */var t2=b.closest("tr").nextElementSibling;while(t2&&!t2.classList.contains("grouprow")){var eb=t2.querySelector&&t2.querySelector(".exp-btn");if(eb)eb.textContent="+";t2=t2.nextElementSibling;}}
   });});
-  airBody.querySelectorAll(".row-tk").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();openTicket(RECS[+b.dataset.i]);});});
+  airBody.querySelectorAll(".row-tk").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();openBrief(RECS[+b.dataset.i]);});});
   airBody.querySelectorAll(".exp-btn").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();
     var tr=b.closest("tr");var open=b.textContent==="−";b.textContent=open?"+":"−";
     var n=tr.nextElementSibling;
@@ -794,7 +827,46 @@ function openFiche(r){
       "<div class='cell'><b>Structure Hn (scrapée du top 3)</b><div class='hn-outline'>"+hn+"</div></div></div>"+
     "<div class='fiche-foot'><button class='row-tk' id='ficheTk'>Créer le brief</button><span class='fictif'>Fiche Content Asset, données d'exemple. Les champs SERP sont pré-remplis par le workflow, l'expert valide et enrichit.</span></div>"
   );
-  var tb=document.getElementById("ficheTk");if(tb)tb.addEventListener("click",function(){openTicket(r);});
+  var tb=document.getElementById("ficheTk");if(tb)tb.addEventListener("click",function(){openBrief(r);});
+}
+function briefHTML(r){
+  var opt=r.typeAction==="optimiser";
+  var fan=(r.fanout||[]).slice(0,8).map(function(q){return '<span class="fan">'+q+'</span>';}).join("");
+  var hn=(r.hn||[]).map(function(b){return '<div class="hn-h2">'+b.h2+'</div>'+(b.h3&&b.h3.length?'<ul class="hn-h3">'+b.h3.map(function(x){return '<li>'+x+'</li>';}).join("")+'</ul>':"");}).join("");
+  var bloc=(r.blocRetenir||[]).map(function(x){return '<li>'+x+'</li>';}).join("");
+  var serpEl=(r.serpEl||[]).map(function(x){return '<span class="fan">'+x+'</span>';}).join("");
+  var destBtns=Object.keys(DEST).map(function(k){return '<button data-d="'+k+'" aria-pressed="'+(k===r.tk.dest)+'">'+DEST[k]+'</button>';}).join("");
+  return '<div class="b-kick">'+r.rubl+' · '+r.cible+' <span class="ta-pill '+r.typeAction+'">'+(opt?"À optimiser":"À créer")+'</span>'+(opt&&r.urlEx?'<span class="url-ex" style="margin:0">'+r.urlEx+'</span>':"")+'</div>'+
+  '<div class="b-head"><h3>'+r.t+'</h3><span class="b-score">'+r.score+' /100</span></div>'+
+  '<div class="b-meta"><span>Mot-clé prioritaire · <b class="kwm">'+r.kw+'</b></span><span>Page business · <b>'+r.pb+'</b></span><span>Échéance · <b>'+r.ech+'</b></span></div>'+
+  '<div class="b-lab">Title et meta, prévisualisés <span class="th-api">API</span></div>'+
+  '<div class="serp-prev"><div class="sp-u">leboncoin.fr › '+(r.urlEx||r.rubl.toLowerCase())+'</div><div class="sp-t">'+r.title+'</div><div class="sp-m">'+r.meta+'</div></div>'+
+  '<div class="b-lab">Intention de recherche <span class="th-api">API</span></div><p class="b-src" style="margin:0">'+r.intention+'</p>'+
+  '<div class="b-lab">Bloc à retenir, citable par les moteurs IA</div><div class="b-ret"><ul style="margin:0;padding:0;list-style:disc">'+bloc+'</ul></div>'+
+  '<div class="b-cols"><div><div class="b-lab">Plan Hn, scrapé du top 3 <span class="th-api">API</span></div><div class="hn-outline">'+hn+'</div></div>'+
+  '<div><div class="b-lab">Questions à couvrir <span class="th-api">API</span></div><div class="mini-fan" style="gap:5px">'+fan+'</div>'+
+  '<div class="b-lab">Éléments attendus dans la page <span class="th-api">API</span></div><div class="mini-fan" style="gap:5px">'+serpEl+'</div>'+
+  '<div class="b-lab">Sources à citer</div><p class="b-src" style="margin:0">'+r.topSource+'</p></div></div>'+
+  '<div class="b-foot"><span class="b-lab" style="margin:0">Envoyer en production</span><div class="dest" id="briefDest">'+destBtns+'</div><button class="b-push" id="briefPush">Pousser le brief</button><button class="b-tklink" id="briefTk">voir le ticket de production</button></div>'+
+  '<p class="fictif" style="margin:10px 0 0">Brief pré-rempli à 70 % par la machine, données d\u2019exemple. Le consultant finalise, vos SEO valident : un brief validé ne se rediscute plus.</p>';
+}
+function openBrief(r){
+  modalCard.classList.add("wide");
+  openModal('<div class="b-load"><h3>Création du brief…</h3>'+
+    '<div class="b-step" id="bs1"><span class="dot"></span>Lecture de la SERP réelle : top 10, questions posées, formats</div>'+
+    '<div class="b-step" id="bs2"><span class="dot"></span>Assemblage du plan, du title, de la meta et du bloc à retenir</div>'+
+    '<div class="b-step" id="bs3"><span class="dot"></span>Brief prêt : 13 champs remplis, à finaliser par le consultant</div></div>');
+  $("#bs1").classList.add("run");
+  setTimeout(function(){$("#bs1").classList.remove("run");$("#bs1").classList.add("done");$("#bs2").classList.add("run");},550);
+  setTimeout(function(){$("#bs2").classList.remove("run");$("#bs2").classList.add("done");$("#bs3").classList.add("run");},1050);
+  setTimeout(function(){$("#bs3").classList.remove("run");$("#bs3").classList.add("done");},1400);
+  setTimeout(function(){
+    modalCard.innerHTML='<button class="close" aria-label="Fermer">×</button>'+briefHTML(r);
+    $(".close",modalCard).addEventListener("click",function(){modalCard.classList.remove("wide");closeModal();});
+    var sw=$("#briefDest",modalCard);if(sw)sw.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){sw.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed","false");});b.setAttribute("aria-pressed","true");r.tk.dest=b.dataset.d;var pb=$("#briefPush",modalCard);if(pb&&pb.classList.contains("ok")){pb.classList.remove("ok");pb.textContent="Pousser le brief";}});});
+    var pb=$("#briefPush",modalCard);if(pb)pb.addEventListener("click",function(){pb.classList.add("ok");pb.textContent="Brief poussé vers "+DEST[r.tk.dest]+" ✓";});
+    var tk=$("#briefTk",modalCard);if(tk)tk.addEventListener("click",function(){modalCard.classList.remove("wide");openTicket(r);});
+  },1750);
 }
 function ticketHTML(r,dest){var d=dest||r.tk.dest;
   var destBtns=Object.keys(DEST).map(function(k){return '<button data-d="'+k+'" aria-pressed="'+(k===d)+'">'+DEST[k]+'</button>';}).join("");
