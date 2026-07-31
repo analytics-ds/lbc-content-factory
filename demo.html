@@ -20,7 +20,7 @@
   *{box-sizing:border-box;} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:16px;line-height:1.5;}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
   header.app{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:13px 22px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:60;}
-  .brand{display:flex;align-items:center;gap:12px;} .b-ds{height:17px;display:block;} .b-sep{width:1px;height:22px;background:var(--line);} .b-lbc{height:19px;display:block;position:relative;top:1px;} .brand small{font-weight:600;font-size:10px;line-height:1;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-left:2px;align-self:center;position:relative;top:1px;} @media (prefers-color-scheme:dark){.b-ds{filter:invert(1);}}
+  .brand{display:flex;align-items:center;gap:12px;} .b-ds{height:17px;display:block;} .b-sep{width:1px;height:22px;background:var(--line);} .b-lbc{height:19px;display:block;position:relative;top:1px;} .brand small{font-weight:600;font-size:10px;line-height:1;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-left:2px;align-self:center;position:relative;top:3px;} @media (prefers-color-scheme:dark){.b-ds{filter:invert(1);}}
   nav.tabs{display:flex;gap:3px;margin-left:auto;flex-wrap:wrap;}
   nav.tabs button{appearance:none;border:1px solid transparent;background:none;color:var(--muted);font:600 12.5px var(--fb);padding:7px 12px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;}
   nav.tabs button:hover{background:var(--surface-2);color:var(--ink);} nav.tabs button[aria-current="true"]{background:var(--ink);color:var(--bg);}
@@ -108,7 +108,6 @@
   .air-gridwrap{overflow-x:auto;} table.airgrid{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px;font-size:13.5px;}
   table.airgrid th:last-child,table.airgrid td:last-child{position:sticky;right:0;z-index:2;box-shadow:-10px 0 12px -10px rgba(20,18,16,.25);}
   table.airgrid td:last-child{border-left:1px solid var(--line);}
-  table.airgrid th:first-child,table.airgrid td:first-child{position:sticky;left:0;z-index:2;box-shadow:10px 0 12px -10px rgba(20,18,16,.18);}
   tr.grouprow td{position:static !important;box-shadow:none !important;}
   table.airgrid th{text-align:left;font:600 10.5px var(--fd);letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.78);padding:11px 12px;border-bottom:none;border-right:1px solid rgba(255,255,255,.1);white-space:nowrap;background:var(--ink);}
   table.airgrid td{padding:10px 12px;border-bottom:1px solid var(--line);border-right:none;vertical-align:middle;white-space:nowrap;background:var(--surface);}
