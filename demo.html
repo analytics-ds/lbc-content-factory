@@ -373,26 +373,25 @@
   /* Le titre et ses puces ne se separent pas a la coupure de colonne. */
   .hn-outline .hn-grp{break-inside:avoid;page-break-inside:avoid;margin-bottom:14px;}
   /* Maquette d'optimisation : page client annotee, ouverte dans un onglet. */
-  .maq-opt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:26px;align-items:stretch;
-    border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:22px 24px;margin:20px 0 26px;}
-  .maq-txt h3{margin:2px 0 8px;font:500 19px var(--fd);}
-  .maq-txt p{margin:0 0 12px;font-size:13.5px;color:var(--ink-2);line-height:1.6;}
-  .maq-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
-  .maq-pills span{font:600 10.5px var(--fb);text-transform:uppercase;color:var(--ink-2);
-    background:var(--surface-2);border-radius:999px;padding:4px 10px;}
-  .maq-cta{display:inline-block;background:var(--ink);color:var(--bg);text-decoration:none;
-    font:700 13px var(--fb);padding:10px 18px;border-radius:999px;}
-  .maq-cta:hover{opacity:.86}
+  /* Exemple d'optimisation : l'apercu occupe toute la largeur de la vue. */
+  .maq-opt{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+    padding:18px;margin:18px 0 0;display:flex;flex-direction:column;gap:14px;}
   .maq-vue{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface-2);
-    display:flex;flex-direction:column;min-height:520px;}
-  .maq-chrome{display:flex;align-items:center;gap:6px;padding:7px 11px;background:var(--surface);
-    border-bottom:1px solid var(--line);font:500 10.5px var(--fm);color:var(--muted);}
+    display:flex;flex-direction:column;height:min(70vh,760px);}
+  .maq-chrome{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--surface);
+    border-bottom:1px solid var(--line);font:500 11px var(--fm);color:var(--muted);}
   .maq-chrome i{width:9px;height:9px;border-radius:50%;background:var(--line);flex:none;}
   .maq-chrome span{margin-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .maq-vue .cadre{flex:1;overflow:hidden;position:relative;background:#fff;}
-  .maq-vue iframe{position:absolute;top:0;left:0;width:1280px;height:820px;border:0;background:#fff;
-    transform:scale(.63);transform-origin:0 0;}
-  @media(max-width:900px){.maq-opt{grid-template-columns:1fr}}
+  .maq-vue iframe{position:absolute;top:0;left:0;width:1440px;height:1520px;border:0;background:#fff;
+    transform:scale(var(--maq-z,.9));transform-origin:0 0;}
+  .maq-pied{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .maq-pills{display:flex;flex-wrap:wrap;gap:6px;flex:1;}
+  .maq-pills span{font:600 10.5px var(--fb);text-transform:uppercase;color:var(--ink-2);
+    background:var(--surface-2);border-radius:999px;padding:4px 10px;}
+  .maq-cta{display:inline-block;background:var(--ink);color:var(--bg);text-decoration:none;
+    font:700 13px var(--fb);padding:10px 18px;border-radius:999px;white-space:nowrap;}
+  .maq-cta:hover{opacity:.86}
   .hn-outline .hn-h3{margin-bottom:0;} .hn-h2{font:700 12.5px var(--fd);margin:8px 0 2px;color:var(--ink);} .hn-h3{margin:0 0 4px;padding-left:18px;color:var(--ink-2);} .hn-h3 li{margin:2px 0;}
   .fiche-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;}
 
@@ -507,34 +506,19 @@
 
   <!-- VUE-OPTIM -->
   <section class="view" id="v-optim">
-    <h2 class="vt">Vos pages passées au crible</h2>
-    <p class="lede">Le diagnostic sur la grille des brevets, les entités manquantes, puis la page réécrite
-      avec chaque ajout justifié. <b>Cliquez un critère</b> pour voir le bloc qui le corrige.</p>
-    <p class="src-note" id="optSrc"></p>
+    <h2 class="vt">Exemple d'optimisation finale d'une page</h2>
+    <p class="lede">Votre page reprise à l'identique, avec les neuf éléments SEO et GEO à ajouter.</p>
     <div class="maq-opt">
-      <div class="maq-txt">
-        <div class="b-lab" style="margin-top:0">Exemple sur une de vos pages</div>
-        <h3>Achat immobilier : simulez votre crédit sur leboncoin</h3>
-        <p>Votre page reprise à l'identique, avec les <b>neuf éléments SEO et GEO à ajouter</b>
-           signalés par une pastille numérotée. Chaque pastille dit ce qu'on pose et pourquoi
-           les moteurs génératifs le reprennent.</p>
-        <div class="maq-pills"><span>Résumé en tête</span><span>Titres en questions</span><span>Tableau de restitution</span><span>Chiffres sourcés</span><span>FAQ</span><span>JSON-LD</span></div>
-        <a class="maq-cta" href="https://analytics-ds.github.io/lbc-content-factory/exemple-optimisation.html" target="_blank" rel="noopener">Ouvrir la page annotée</a>
-      </div>
       <div class="maq-vue">
         <div class="maq-chrome"><i></i><i></i><i></i><span>leboncoin.fr/guide/immobilier/achat_immobilier_simulez_votre_credit</span></div>
-        <div class="cadre"><iframe src="https://analytics-ds.github.io/lbc-content-factory/exemple-optimisation.html?v=6"
+        <div class="cadre"><iframe src="https://analytics-ds.github.io/lbc-content-factory/exemple-optimisation.html?v=9"
                 title="Page leboncoin annotée SEO et GEO" loading="lazy" scrolling="no"></iframe></div>
       </div>
+      <div class="maq-pied">
+        <div class="maq-pills"><span>Résumé en tête</span><span>Date de mise à jour</span><span>Titres en questions</span><span>Tableau de restitution</span><span>Chiffres sourcés</span><span>Définitions d'entités</span><span>FAQ</span><span>Maillage business</span><span>JSON-LD</span></div>
+        <a class="maq-cta" href="https://analytics-ds.github.io/lbc-content-factory/exemple-optimisation.html" target="_blank" rel="noopener">Ouvrir la page annotée</a>
+      </div>
     </div>
-    <div id="optCtx"></div>
-    <div id="optPages"></div>
-    <div id="optDiag"></div>
-    <div id="optEnt"></div>
-    <div id="optZone"></div>
-    <div id="optPlan"></div>
-    <div id="optMes"></div>
-    <div id="optBranch"></div>
   </section>
   <!-- /VUE-OPTIM -->
 
@@ -4720,4 +4704,15 @@ document.addEventListener("click", function(e){
 })();
 </script>
 <!-- /PATCH -->
+<script>
+/* L'apercu rend la page en 1440 px : on l'ajuste a la largeur du cadre. */
+(function(){
+  function zoom(){
+    var c=document.querySelector(".maq-vue .cadre"); if(!c)return;
+    c.parentElement.style.setProperty("--maq-z", (c.clientWidth/1440).toFixed(3));
+  }
+  addEventListener("resize",zoom); setTimeout(zoom,200); setTimeout(zoom,900);
+  document.addEventListener("click",function(e){if(e.target.closest("[data-view=optim]"))setTimeout(zoom,120);});
+})();
+</script>
 </body></html>
