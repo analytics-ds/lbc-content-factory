@@ -383,7 +383,9 @@
   .maq-chrome i{width:9px;height:9px;border-radius:50%;background:var(--line);flex:none;}
   .maq-chrome span{margin-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .maq-vue .cadre{flex:1;overflow:hidden;position:relative;background:#fff;}
+  /* L'apercu est une vignette : aucun clic ne doit y naviguer. */
   .maq-vue iframe{position:absolute;top:0;left:0;width:1440px;height:1520px;border:0;background:#fff;
+    pointer-events:none;
     transform:scale(var(--maq-z,.9));transform-origin:0 0;}
   .maq-pied{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
   .maq-pills{display:flex;flex-wrap:wrap;gap:6px;flex:1;}
@@ -511,7 +513,7 @@
     <div class="maq-opt">
       <div class="maq-vue">
         <div class="maq-chrome"><i></i><i></i><i></i><span>leboncoin.fr/guide/immobilier/achat_immobilier_simulez_votre_credit</span></div>
-        <div class="cadre"><iframe src="https://analytics-ds.github.io/lbc-content-factory/exemple-optimisation.html?v=11"
+        <div class="cadre"><iframe src="https://analytics-ds.github.io/lbc-content-factory/exemple-optimisation.html?v=13"
                 title="Page leboncoin annotée SEO et GEO" loading="lazy" scrolling="no"></iframe></div>
       </div>
       <div class="maq-pied">
