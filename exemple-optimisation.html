@@ -5776,21 +5776,20 @@ body, body [data-theme] { color: var(--color-on-background); background-color: v
 /* La page a ete capturee pendant que la fenetre de cookies verrouillait le
    defilement : le body gardait overflow:hidden. */
 html,body{overflow:visible!important;position:static!important;height:auto!important}
-.ds-add{position:relative;border-left:4px solid var(--ds-c,#2E7DF7);background:var(--ds-bg,#F2F7FF);
-  border-radius:0 10px 10px 0;padding:16px 20px;margin:22px 0}
-.ds-add.seo{--ds-c:#0F9D58;--ds-bg:#F1FBF5}
-.ds-add.aut{--ds-c:#8A5CF6;--ds-bg:#F7F4FF}
-.ds-add.tec{--ds-c:#6E6860;--ds-bg:#F5F4F2}
-.ds-add h4{margin:0 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#6E6860}
+.ds-add{position:relative;border:2px dashed #E4002B;background:transparent;color:#E4002B;
+  border-radius:10px;padding:18px 22px;margin:26px 0}
+.ds-add h4{margin:0 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#E4002B;opacity:.78}
+.ds-add p,.ds-add dd,.ds-add dt,.ds-add li,.ds-add td,.ds-add th{color:#E4002B}
 .ds-add p{margin:0 0 8px}.ds-add p:last-child{margin-bottom:0}
+.ds-add b,.ds-add strong,.ds-add code{color:#E4002B}
 .ds-add table{border-collapse:collapse;width:100%;font-size:15px}
-.ds-add th,.ds-add td{border:1px solid #E6E1D9;padding:7px 10px;text-align:left}
-.ds-add th{background:#fff;font-weight:600}
+.ds-add th,.ds-add td{border:1px dashed rgba(228,0,43,.45);padding:7px 10px;text-align:left}
+.ds-add th{font-weight:600}
 .ds-add dt{font-weight:600;margin-top:10px}.ds-add dd{margin:2px 0 0}
 .ds-pin{position:absolute;top:-14px;left:8px;width:28px;height:28px;border-radius:50%;
-  background:var(--ds-c,#2E7DF7);color:#fff;border:2px solid #fff;
+  background:#E4002B;color:#fff;border:2px solid #fff;
   font:600 13px/1 ui-monospace,Menlo,monospace;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:30;box-shadow:0 3px 10px rgba(0,0,0,.22)}
+  cursor:pointer;z-index:30;box-shadow:0 3px 10px rgba(228,0,43,.4)}
 .ds-pin:hover{transform:scale(1.15)}
 h2 .ds-pin,h3 .ds-pin{top:50%;left:auto;right:-14px;transform:translateY(-50%)}
 h2 .ds-pin:hover,h3 .ds-pin:hover{transform:translateY(-50%) scale(1.15)}
@@ -5823,15 +5822,15 @@ function pose(n,cible,html,avant){
 }
 /* 2 : date de mise a jour, juste avant le titre de l'article */
 var h1=document.querySelector("h1");
-if(h1){var maj=document.createElement("div");maj.className="ds-add seo";maj.style.cssText="border:0;background:none;padding:0;margin:0 0 14px";
-  maj.innerHTML='<span class="ds-pin" data-n="2">2</span><span style="display:inline-block;font-size:13px;color:#6E6860;border:1px solid #E6E1D9;border-radius:999px;padding:4px 12px">Mis à jour le 14 septembre 2026 · Publié en juillet 2025</span>';
+if(h1){var maj=document.createElement("div");maj.className="ds-add seo";maj.style.cssText="padding:10px 16px;margin:0 0 16px;display:inline-block";
+  maj.innerHTML='<span class="ds-pin" data-n="2">2</span><span style="display:inline-block;font-size:13px;color:#E4002B;border-radius:999px;padding:0">Mis à jour le 14 septembre 2026 · Publié en juillet 2025</span>';
   h1.parentNode.insertBefore(maj,h1);}
 /* 1 : resume en tete */
 pose(1,para(/Vous voulez accéder à la propriété/),
  '<h4>À retenir</h4><p>Depuis juillet 2025, un simulateur de crédit Meilleurtaux est intégré en bas de plus de 160 000 annonces immobilières leboncoin. En renseignant son apport et la durée du prêt, l\'acheteur obtient le montant empruntable, les frais de notaire, le taux, le coût des intérêts et la mensualité. Un conseiller peut ensuite délivrer une attestation de finançabilité, le document qui prouve la capacité d\'emprunt face au vendeur.</p>');
 /* 3 : titre a reformuler en question */
 var t3=apresTitre(/partenariat pour booster/);
-if(t3){t3.style.position="relative";var s=document.createElement("span");s.className="ds-pin";s.dataset.n="3";s.textContent="3";s.style.setProperty("--ds-c","#0F9D58");t3.appendChild(s);}
+if(t3){t3.style.position="relative";var s=document.createElement("span");s.className="ds-pin";s.dataset.n="3";s.textContent="3";t3.appendChild(s);}
 /* 5 : chiffres sources */
 pose(5,para(/Ce partenariat rend le parcours/),
  '<h4>Les chiffres, datés et sourcés</h4><p style="font-size:15px;color:#3D3B38">160 000 annonces couvertes, 20 000 dossiers attendus la première année, 300 millions d\'euros de crédits générés. Source : communiqué leboncoin et Meilleurtaux, juillet 2025. Chiffres prévisionnels annoncés au lancement.</p>',false);
