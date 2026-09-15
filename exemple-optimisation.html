@@ -5858,6 +5858,13 @@ if(fin){
   var f8=fin.parentNode.querySelectorAll(".ds-add"); 
   pose(9,f8[f8.length-1],'<h4>Balisage à poser dans le &lt;head&gt;</h4><p style="font-size:15px;color:#3D3B38">JSON-LD <code>Article</code> avec auteur, date de publication et date de modification, plus un bloc <code>FAQPage</code> reprenant les quatre questions ci-dessus.</p>');
 }
+/* Les liens de la page capturee ne menent nulle part d'utile : cliquer
+   dessus faisait naviguer la maquette vers leboncoin, qui refuse d'etre
+   affiche en cadre. On les neutralise, les pastilles restent actives. */
+document.addEventListener("click",function(e){
+  var lien=e.target.closest("a[href]");
+  if(lien&&!lien.closest(".ds-add")){e.preventDefault();e.stopPropagation();}
+},true);
 /* Infobulle */
 var pop=document.createElement("div"); pop.className="ds-pop";
 pop.innerHTML='<span class="x">×</span><div class="c"></div><div class="t"></div><div class="p"></div>';
