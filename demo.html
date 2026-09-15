@@ -1629,8 +1629,10 @@ function optHtmlCartePage(pg, actif){
           '" aria-pressed="' + (actif ? "true" : "false") + '">';
   h += '<span class="at">' + oEsc(pg.archetype || pg.typePage || "") + "</span>";
   h += '<div class="ti">' + oEsc(pg.titre || "") + "</div>";
-  h += '<a class="ur" href="' + oEsc(pg.url || "#") + '" target="_blank" rel="noopener" data-ext="1">' +
-       oEsc(String(pg.url || "").replace(/^https?:\/\//, "")) + "</a>";
+  /* Ces URL sont des emplacements cibles, pas des pages en ligne : les rendre
+     cliquables enverrait le prospect sur un 404 pendant la demonstration. */
+  h += '<span class="ur" title="Emplacement cible proposé, la page n\'existe pas encore">' +
+       oEsc(String(pg.url || "").replace(/^https?:\/\//, "")) + "</span>";
   h += '<div class="cv">';
   h += '<span class="chip ' + optChipRubrique(pg.transposition) + '" title="Rubrique leboncoin équivalente. Transposition de méthode, pas une mesure sur leurs pages.">' +
        oEsc(pg.transposition || "transposition non définie") + "</span>";
