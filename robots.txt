@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /
+Allow: /brief-vide-grenier.html
