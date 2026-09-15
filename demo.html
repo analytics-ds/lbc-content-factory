@@ -170,7 +170,24 @@
   .b-cols>div+div{padding-left:38px;border-left:1px solid var(--line);} @media (max-width:640px){.b-cols{grid-template-columns:1fr;}
     .b-cols>div+div{padding-left:0;border-left:0;}}
   .b-src{font-size:12.5px;color:var(--ink-2);}
-  .b-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .b-foot{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  /* Les deux actions sont repoussees a droite, separees des destinations. */
+  .b-foot .b-acts{margin-left:auto;display:flex;align-items:center;gap:10px;}
+  .b-foot .dest{margin:0;}
+  /* Rediger par IA : action secondaire, bordee, pour ne pas concurrencer
+     le noir plein de « Pousser le brief ». */
+  .b-ia{appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+    background:var(--surface);color:var(--ink);border:1.5px solid var(--ink);
+    font:700 13px var(--fb);padding:9px 17px;border-radius:999px;transition:all .15s;}
+  .b-ia:hover{background:var(--ink);color:var(--bg);}
+  .b-ia .sp{font-size:14px;line-height:1}
+  /* Barre de progression de la redaction. */
+  .ia-bar{height:4px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:4px 0 2px;}
+  .ia-bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .45s ease;}
+  .ia-pct{font:700 11px var(--fb);color:var(--muted);}
+  .ia-done{margin-top:10px;display:flex;align-items:center;gap:10px;}
+  .ia-open{appearance:none;cursor:pointer;border:none;background:var(--ink);color:var(--bg);
+    font:700 13px var(--fb);padding:9px 17px;border-radius:999px;text-decoration:none;}
   .b-push{appearance:none;cursor:pointer;border:none;background:var(--ink);color:var(--bg);font:700 13px var(--fb);padding:10px 18px;border-radius:999px;transition:background .15s;}
   .b-push:hover{background:var(--accent);color:var(--accent-ink);}
   .b-push.ok{background:var(--ok);color:#fff;cursor:default;}
@@ -979,7 +996,9 @@ function briefHTML(r){
   '<div><div class="b-lab" style="margin-top:0">Questions à couvrir <span class="th-api">API</span></div><div class="mini-fan" style="gap:5px">'+fan+'</div>'+
   '<div class="b-lab">Maillage à poser</div><ul class="b-mail" style="margin:0;padding:0"><li>Vers la page business : <b>'+r.pb+'</b></li>'+RECS.filter(function(x){return x.rub===r.rub&&x.id!==r.id;}).slice(0,2).map(function(x){return '<li>Vers le contenu du cluster : <b>'+x.t+'</b></li>';}).join("")+'</ul>'+
   '<div class="b-lab">Ce que le visa vérifiera avant relecture</div><div class="b-visa"><span class="v">Plan couvert</span><span class="v">Sources citées</span><span class="v">Maillage posé</span><span class="v">Charte leboncoin</span><span class="v">Score sémantique &gt; n°1</span></div></div></div>'+
-  '<div class="b-foot"><span class="b-lab" style="margin:0">Envoyer en production</span><div class="dest" id="briefDest">'+destBtns+'</div><button class="b-push" id="briefPush">Pousser le brief</button></div>';
+  '<div class="b-foot"><span class="b-lab" style="margin:0">Envoyer en production</span><div class="dest" id="briefDest">'+destBtns+'</div>'+
+    '<div class="b-acts"><button class="b-ia" id="briefIA"><span class="sp">✦</span>Rédaction par IA</button>'+
+    '<button class="b-push" id="briefPush">Pousser le brief</button></div></div>';
 }
 function openBrief(r){
   modalCard.classList.add("wide");
@@ -995,12 +1014,60 @@ function openBrief(r){
     modalCard.innerHTML='<button class="close" aria-label="Fermer">×</button>'+briefHTML(r);
     $(".close",modalCard).addEventListener("click",function(){modalCard.classList.remove("wide");closeModal();});
     var sw=$("#briefDest",modalCard);if(sw)sw.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){sw.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed","false");});b.setAttribute("aria-pressed","true");r.tk.dest=b.dataset.d;var pb=$("#briefPush",modalCard);if(pb&&pb.classList.contains("ok")){pb.classList.remove("ok");pb.textContent="Pousser le brief";}});});
+    var ia=$("#briefIA",modalCard);if(ia)ia.addEventListener("click",function(){redigerIA(r);});
     var pb=$("#briefPush",modalCard);if(pb)pb.addEventListener("click",function(){
       pb.classList.add("ok");pb.textContent="Brief poussé vers "+DEST[r.tk.dest]+" ✓";
       /* Le ticket s'ouvre dans la foulee, dans l'interface de l'outil choisi. */
       setTimeout(function(){openTicket(r);modalCard.scrollTop=0;},620);  /* le ticket garde la largeur du brief */
     });
   },1750);
+}
+/* Redaction par IA : on deroule les elements du brief dans l'ordre ou ils
+   sont produits, puis on ouvre le brief Corpus. */
+var IA_ETAPES=[
+  ["Lecture du brief", "mot-clé, intention de recherche et page business", 700],
+  ["Structure Hn", "plan en 5 sections, relevé sur le top 3", 900],
+  ["Balise title et meta description", "sous les limites d'affichage Google", 750],
+  ["Bloc à retenir", "4 affirmations citables par les moteurs IA", 800],
+  ["Questions à couvrir", "fan-out SERP, 6 requêtes connexes", 700],
+  ["Rédaction des sections", "1 800 mots, champ sémantique couvert", 1500],
+  ["Maillage interne et sources", "page business, cluster, sources d'autorité", 700],
+  ["Scoring Corpus", "contrôle du champ sémantique et des motifs GEO", 900]
+];
+function redigerIA(r){
+  var n=IA_ETAPES.length;
+  modalCard.innerHTML='<button class="close" aria-label="Fermer">×</button>'+
+    '<div class="b-load"><h3>Rédaction par IA…</h3>'+
+    '<div class="ia-bar"><i id="iaFill"></i></div><div class="ia-pct" id="iaPct">0 %</div>'+
+    IA_ETAPES.map(function(e,i){
+      return '<div class="b-step" id="ia'+i+'"><span class="dot"></span><span><b>'+e[0]+'</b> '+
+             '<span style="color:var(--muted)">'+e[1]+'</span></span></div>';}).join("")+
+    '</div>';
+  $(".close",modalCard).addEventListener("click",closeModal);
+  var t=0;
+  IA_ETAPES.forEach(function(e,i){
+    setTimeout(function(){
+      var el=$("#ia"+i,modalCard); if(!el)return;
+      el.classList.add("run");
+    },t);
+    t+=e[2];
+    setTimeout(function(){
+      var el=$("#ia"+i,modalCard); if(!el)return;
+      el.classList.remove("run"); el.classList.add("done");
+      var f=$("#iaFill",modalCard), pc=$("#iaPct",modalCard);
+      if(f)f.style.width=Math.round((i+1)/n*100)+"%";
+      if(pc)pc.textContent=Math.round((i+1)/n*100)+" %";
+    },t);
+  });
+  setTimeout(function(){
+    var h3=modalCard.querySelector(".b-load h3"); if(h3)h3.textContent="Contenu rédigé, brief ouvert dans Corpus";
+    var w=window.open(CORPUS_BRIEF_URL,"_blank","noopener");
+    var z=document.createElement("div"); z.className="ia-done";
+    /* Si le navigateur bloque l'ouverture automatique, on laisse la main. */
+    z.innerHTML=(w?'<span style="font-size:13px;color:var(--muted)">Le brief s\'est ouvert dans un nouvel onglet.</span>':'')+
+      '<a class="ia-open" href="'+CORPUS_BRIEF_URL+'" target="_blank" rel="noopener">Ouvrir le brief dans Corpus</a>';
+    var box=modalCard.querySelector(".b-load"); if(box)box.appendChild(z);
+  },t+350);
 }
 function ticketHTML(r,dest){var d=dest||r.tk.dest;
   var destBtns=Object.keys(DEST).map(function(k){return '<button data-d="'+k+'" aria-pressed="'+(k===d)+'">'+DEST[k]+'</button>';}).join("");
