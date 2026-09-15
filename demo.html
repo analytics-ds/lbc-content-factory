@@ -1024,6 +1024,9 @@ function openBrief(r){
 }
 /* Redaction par IA : on deroule les elements du brief dans l'ordre ou ils
    sont produits, puis on ouvre le brief Corpus. */
+/* Brief Corpus partage, ouvert en fin de sequence de redaction.
+   Declare en global : la sequence et le rendu Jira sont dans deux blocs separes. */
+window.CORPUS_BRIEF_URL = 'https://corpus.datashake.fr/share-brief/fuVODriShp1RwEVdcH3jDqHLuThtXmJ-';
 var IA_ETAPES=[
   ["Lecture du brief", "mot-clé, intention de recherche et page business", 700],
   ["Structure Hn", "plan en 5 sections, relevé sur le top 3", 900],
@@ -1035,6 +1038,7 @@ var IA_ETAPES=[
   ["Scoring Corpus", "contrôle du champ sémantique et des motifs GEO", 900]
 ];
 function redigerIA(r){
+  /* appelable aussi depuis le ticket Jira */
   var n=IA_ETAPES.length;
   modalCard.innerHTML='<button class="close" aria-label="Fermer">×</button>'+
     '<div class="b-load"><h3>Rédaction par IA…</h3>'+
@@ -1061,14 +1065,15 @@ function redigerIA(r){
   });
   setTimeout(function(){
     var h3=modalCard.querySelector(".b-load h3"); if(h3)h3.textContent="Contenu rédigé, brief ouvert dans Corpus";
-    var w=window.open(CORPUS_BRIEF_URL,"_blank","noopener");
+    var w=window.open(window.CORPUS_BRIEF_URL,"_blank","noopener");
     var z=document.createElement("div"); z.className="ia-done";
     /* Si le navigateur bloque l'ouverture automatique, on laisse la main. */
     z.innerHTML=(w?'<span style="font-size:13px;color:var(--muted)">Le brief s\'est ouvert dans un nouvel onglet.</span>':'')+
-      '<a class="ia-open" href="'+CORPUS_BRIEF_URL+'" target="_blank" rel="noopener">Ouvrir le brief dans Corpus</a>';
+      '<a class="ia-open" href="'+window.CORPUS_BRIEF_URL+'" target="_blank" rel="noopener">Ouvrir le brief dans Corpus</a>';
     var box=modalCard.querySelector(".b-load"); if(box)box.appendChild(z);
   },t+350);
 }
+window.redigerIA=redigerIA;
 function ticketHTML(r,dest){var d=dest||r.tk.dest;
   var destBtns=Object.keys(DEST).map(function(k){return '<button data-d="'+k+'" aria-pressed="'+(k===d)+'">'+DEST[k]+'</button>';}).join("");
   var destLine=d==="interne"?"Tâche créée dans la table de tâches du cockpit (aucun accès à votre SI requis).":d==="email"?"E-mail structuré envoyé au bon destinataire (canal plancher, zéro dépendance).":"Ticket typé poussé dans "+DEST[d]+" ; le cockpit reste la source de vérité, "+DEST[d]+" reste votre interface.";
@@ -4601,10 +4606,6 @@ document.addEventListener("click", function(e){
     return txt.split(sep).map(function(x){return x.trim();}).filter(Boolean).slice(0,max||6)
       .map(function(x){return '<li>'+x+'</li>';}).join('');
   }
-  /* Brief Corpus vers lequel pointe « Rédiger le contenu ».
-     A remplacer par le lien de partage du brief reel. */
-  var CORPUS_BRIEF_URL = 'https://corpus.datashake.fr/share-brief/fuVODriShp1RwEVdcH3jDqHLuThtXmJ-';
-
   function jiraHTML(card,prev){
     var c=champs(prev);
     var titre=(card.querySelector('h3')||{}).textContent||'';
@@ -4629,7 +4630,7 @@ document.addEventListener("click", function(e){
       '<div class="j-key"><span class="j-ic task"></span>'+cle+'</div>'+
       '<h3 class="j-title">'+titre+'</h3>'+
       '<div class="j-actions"><button class="j-st todo">'+statut+'</button>'+
-      '<a class="j-write" href="'+CORPUS_BRIEF_URL+'" target="_blank" rel="noopener">Rédiger le contenu</a>'+
+      '<button class="j-write" onclick="window.redigerIA&&window.redigerIA()">Rédiger le contenu</button>'+
       '<button class="j-btn">Attribuer</button><button class="j-btn">Commenter</button></div>'+
       '<div class="j-cols"><div><p class="j-h">Description</p><div class="j-desc">'+
       '<div class="j-panel"><b>Brief-contrat, généré depuis le cockpit</b>'+
