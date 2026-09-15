@@ -4367,6 +4367,8 @@ document.addEventListener("click", function(e){
 .j-st.prog{background:#DEEBFF;color:#0747A6}
 .j-btn{appearance:none;border:0;border-radius:3px;padding:6px 12px;font-size:13px;
   background:var(--j-soft);color:var(--j-txt);cursor:default}
+.j-write{display:inline-flex;align-items:center;border:0;border-radius:3px;background:var(--j-blue);color:#fff;font:600 13px var(--fb);padding:6px 13px;text-decoration:none;cursor:pointer}
+.j-write:hover{background:#0747A6}
 .j-cols{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:22px}
 .j-h{font-size:12.5px;font-weight:600;color:var(--j-mut);margin:0 0 7px}
 .j-desc{font-size:13.5px;line-height:1.58}
@@ -4532,6 +4534,10 @@ document.addEventListener("click", function(e){
     return txt.split(sep).map(function(x){return x.trim();}).filter(Boolean).slice(0,max||6)
       .map(function(x){return '<li>'+x+'</li>';}).join('');
   }
+  /* Brief Corpus vers lequel pointe « Rédiger le contenu ».
+     A remplacer par le lien de partage du brief reel. */
+  var CORPUS_BRIEF_URL = 'https://corpus.datashake.fr';
+
   function jiraHTML(card,prev){
     var c=champs(prev);
     var titre=(card.querySelector('h3')||{}).textContent||'';
@@ -4556,6 +4562,7 @@ document.addEventListener("click", function(e){
       '<div class="j-key"><span class="j-ic task"></span>'+cle+'</div>'+
       '<h3 class="j-title">'+titre+'</h3>'+
       '<div class="j-actions"><button class="j-st todo">'+statut+'</button>'+
+      '<a class="j-write" href="'+CORPUS_BRIEF_URL+'" target="_blank" rel="noopener">Rédiger le contenu</a>'+
       '<button class="j-btn">Attribuer</button><button class="j-btn">Commenter</button></div>'+
       '<div class="j-cols"><div><p class="j-h">Description</p><div class="j-desc">'+
       '<div class="j-panel"><b>Brief-contrat, généré depuis le cockpit</b>'+
