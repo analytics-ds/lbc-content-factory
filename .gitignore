@@ -1,1 +1,5 @@
 .check/
+_tmp-*
+demo.*.avant-*
+demo.avant-*
+*.png
