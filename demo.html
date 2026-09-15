@@ -141,7 +141,7 @@
   .cible{font:700 10px var(--fb);letter-spacing:.04em;padding:3px 9px;border-radius:5px;} .cible.B2C{background:var(--machine-soft);color:var(--machine);} .cible.B2B{background:var(--si-soft);color:var(--si);}
   .kwm{font-family:var(--fm);font-size:12px;color:var(--ink-2);} .lk{color:var(--accent);font-weight:600;}
   /* brief : generation + document */
-  .modal .card.wide{max-width:860px;}
+  .modal .card.wide{max-width:min(1240px,94vw);}
   .b-load{padding:26px 6px;display:flex;flex-direction:column;gap:14px;min-width:420px;}
   .b-load h3{margin:0 0 2px;font:700 17px var(--fd);}
   .b-step{display:flex;align-items:center;gap:11px;font-size:13.5px;color:var(--muted);transition:color .3s;}
@@ -165,7 +165,10 @@
   @media (prefers-color-scheme:dark){.serp-prev .sp-t{color:#8ab4f8;}}
   .b-ret{background:var(--surface-2);border-left:3px solid #FFFF7D;border-radius:8px;padding:11px 15px;}
   .b-ret li{font-size:13px;color:var(--ink-2);margin:0 0 5px 16px;}
-  .b-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 22px;} @media (max-width:640px){.b-cols{grid-template-columns:1fr;}}
+  .b-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 38px;align-items:start;margin-top:26px;}
+  /* Filet de separation, pose sur la seconde colonne. */
+  .b-cols>div+div{padding-left:38px;border-left:1px solid var(--line);} @media (max-width:640px){.b-cols{grid-template-columns:1fr;}
+    .b-cols>div+div{padding-left:0;border-left:0;}}
   .b-src{font-size:12.5px;color:var(--ink-2);}
   .b-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .b-push{appearance:none;cursor:pointer;border:none;background:var(--ink);color:var(--bg);font:700 13px var(--fb);padding:10px 18px;border-radius:999px;transition:background .15s;}
@@ -346,7 +349,7 @@
   .api-badge{font:700 9px var(--fb);letter-spacing:.04em;text-transform:uppercase;background:var(--machine);color:#fff;border-radius:999px;padding:2px 8px;}
   .fiche-sec .cell{margin-bottom:8px;} .fiche-ul{margin:4px 0 0;padding-left:18px;} .fiche-ul li{margin:3px 0;font-size:13px;}
   .fan-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;} .fan{font:600 11px var(--fb);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px 9px;}
-  .hn-outline{margin-top:6px;font-size:13px;} .hn-h2{font:700 12.5px var(--fd);margin:8px 0 2px;color:var(--ink);} .hn-h3{margin:0 0 4px;padding-left:18px;color:var(--ink-2);} .hn-h3 li{margin:2px 0;}
+  .hn-outline{margin-top:6px;font-size:13.5px;line-height:1.65;} .hn-h2{font:700 12.5px var(--fd);margin:8px 0 2px;color:var(--ink);} .hn-h3{margin:0 0 4px;padding-left:18px;color:var(--ink-2);} .hn-h3 li{margin:2px 0;}
   .fiche-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;}
 
   footer{border-top:1px solid var(--line);margin-top:26px;padding:14px 0 0;text-align:center;font:600 11px var(--fb);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
@@ -964,14 +967,13 @@ function briefHTML(r){
   '<div class="b-lab">Intention de recherche <span class="th-api">API</span></div><p class="b-src" style="margin:0">'+r.intention+'</p>'+
   '<div class="b-lab">Bloc à retenir, citable par les moteurs IA</div><div class="b-ret"><ul style="margin:0;padding:0;list-style:disc">'+bloc+'</ul></div>'+
   '<div class="b-lab">La preuve chiffrée à mobiliser (J-30)</div><div class="b-preuve"><span class="pin"></span><span><b>'+(PREUVE_RUB[r.rub]||PREUVE_RUB.b2b)+'</b> Règle dure : pas de preuve mobilisable, on permute de sujet. Jamais de générique.</span></div>'+
-  '<div class="b-cols"><div><div class="b-lab">Plan Hn, scrapé du top 3 <span class="th-api">API</span></div><div class="hn-outline">'+hn+'</div></div>'+
-  '<div><div class="b-lab">Questions à couvrir <span class="th-api">API</span></div><div class="mini-fan" style="gap:5px">'+fan+'</div>'+
+  '<div class="b-cols"><div><div class="b-lab" style="margin-top:0">Plan Hn, scrapé du top 3 <span class="th-api">API</span></div><div class="hn-outline">'+hn+'</div>'+
   '<div class="b-lab">Éléments attendus dans la page <span class="th-api">API</span></div><div class="mini-fan" style="gap:5px">'+serpEl+'</div>'+
-  '<div class="b-lab">Sources à citer</div><p class="b-src" style="margin:0">'+r.topSource+'</p>'+
+  '<div class="b-lab">Sources à citer</div><p class="b-src" style="margin:0">'+r.topSource+'</p></div>'+
+  '<div><div class="b-lab" style="margin-top:0">Questions à couvrir <span class="th-api">API</span></div><div class="mini-fan" style="gap:5px">'+fan+'</div>'+
   '<div class="b-lab">Maillage à poser</div><ul class="b-mail" style="margin:0;padding:0"><li>Vers la page business : <b>'+r.pb+'</b></li>'+RECS.filter(function(x){return x.rub===r.rub&&x.id!==r.id;}).slice(0,2).map(function(x){return '<li>Vers le contenu du cluster : <b>'+x.t+'</b></li>';}).join("")+'</ul>'+
   '<div class="b-lab">Ce que le visa vérifiera avant relecture</div><div class="b-visa"><span class="v">Plan couvert</span><span class="v">Sources citées</span><span class="v">Maillage posé</span><span class="v">Charte leboncoin</span><span class="v">Score sémantique &gt; n°1</span></div></div></div>'+
-  '<div class="b-foot"><span class="b-lab" style="margin:0">Envoyer en production</span><div class="dest" id="briefDest">'+destBtns+'</div><button class="b-push" id="briefPush">Pousser le brief</button><button class="b-tklink" id="briefTk">voir le ticket de production</button></div>'+
-  '<p class="fictif" style="margin:10px 0 0">Brief pré-rempli à 70 % par la machine, données d\u2019exemple. Le consultant finalise, vos SEO valident : un brief validé ne se rediscute plus.</p>';
+  '<div class="b-foot"><span class="b-lab" style="margin:0">Envoyer en production</span><div class="dest" id="briefDest">'+destBtns+'</div><button class="b-push" id="briefPush">Pousser le brief</button></div>';
 }
 function openBrief(r){
   modalCard.classList.add("wide");
@@ -987,8 +989,11 @@ function openBrief(r){
     modalCard.innerHTML='<button class="close" aria-label="Fermer">×</button>'+briefHTML(r);
     $(".close",modalCard).addEventListener("click",function(){modalCard.classList.remove("wide");closeModal();});
     var sw=$("#briefDest",modalCard);if(sw)sw.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){sw.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed","false");});b.setAttribute("aria-pressed","true");r.tk.dest=b.dataset.d;var pb=$("#briefPush",modalCard);if(pb&&pb.classList.contains("ok")){pb.classList.remove("ok");pb.textContent="Pousser le brief";}});});
-    var pb=$("#briefPush",modalCard);if(pb)pb.addEventListener("click",function(){pb.classList.add("ok");pb.textContent="Brief poussé vers "+DEST[r.tk.dest]+" ✓";});
-    var tk=$("#briefTk",modalCard);if(tk)tk.addEventListener("click",function(){modalCard.classList.remove("wide");openTicket(r);});
+    var pb=$("#briefPush",modalCard);if(pb)pb.addEventListener("click",function(){
+      pb.classList.add("ok");pb.textContent="Brief poussé vers "+DEST[r.tk.dest]+" ✓";
+      /* Le ticket s'ouvre dans la foulee, dans l'interface de l'outil choisi. */
+      setTimeout(function(){openTicket(r);modalCard.scrollTop=0;},620);  /* le ticket garde la largeur du brief */
+    });
   },1750);
 }
 function ticketHTML(r,dest){var d=dest||r.tk.dest;
@@ -4553,8 +4558,8 @@ document.addEventListener("click", function(e){
       (kw?'<h5>Mot-clé prioritaire</h5><p>'+kw+'</p>':'')+
       (pb?'<h5>Page business servie</h5><p>'+pb+'</p>':'')+
       (c['Intention SERP']?'<h5>Intention de recherche</h5><p>'+c['Intention SERP']+'</p>':'')+
-      (c['Structure Hn (top 3)']?'<h5>Structure attendue, relevée sur le top 3</h5><ul>'+liste(c['Structure Hn (top 3)'],'')+'</ul>':'')+
-      (c['Questions à couvrir']?'<h5>Questions à couvrir</h5><ul>'+liste(c['Questions à couvrir'],'')+'</ul>':'')+
+      (c['Structure Hn (top 3)']?'<h5>Structure attendue, relevée sur le top 3</h5><ul>'+liste(c['Structure Hn (top 3)'],' / ')+'</ul>':'')+
+      (c['Questions à couvrir']?'<h5>Questions à couvrir</h5><ul>'+liste(c['Questions à couvrir'],' / ')+'</ul>':'')+
       (c['Top sources à citer']?'<h5>Sources à citer</h5><p>'+c['Top sources à citer']+'</p>':'')+
       (c['Balise title']?'<h5>Balise title</h5><p>'+c['Balise title']+'</p>':'')+
       (c['Meta description']?'<h5>Meta description</h5><p>'+c['Meta description']+'</p>':'')+
