@@ -13,8 +13,7 @@ CSS = r"""
 /* ============ 1 · FIDELITE AIRTABLE ============ */
 .air{--at-blue:#2D7FF9;--at-line:#E5E5E5;--at-head:#F7F7F7;--at-hover:#F5F9FF;
      --at-txt:#1D1F25;--at-mut:#6B6F76}
-@media (prefers-color-scheme:dark){.air{--at-line:#33322C;--at-head:#1F1E19;
-     --at-hover:#232219;--at-txt:#EEEBDF;--at-mut:#9A988B}}
+
 
 /* barre d'outils facon Airtable */
 .at-bar{display:flex;align-items:center;gap:2px;padding:6px 10px;
@@ -52,11 +51,7 @@ CSS = r"""
 .at-c-jaune{background:#FFF3C4;color:#6B5200} .at-c-rose{background:#FFE0E3;color:#8A1B2B}
 .at-c-violet{background:#EAE2FF;color:#4B2D8F} .at-c-gris{background:#EDEDED;color:#43464C}
 .at-c-orange{background:#FFE6CC;color:#8A4B00}
-@media (prefers-color-scheme:dark){
- .at-c-blue{background:#16304D;color:#9CC8F5} .at-c-vert{background:#16351F;color:#93D8AD}
- .at-c-jaune{background:#3A3008;color:#E8D07A} .at-c-rose{background:#3D1A1F;color:#F0A5AE}
- .at-c-violet{background:#26193F;color:#BFA8F0} .at-c-gris{background:#2A2922;color:#B9B6AA}
- .at-c-orange{background:#3A2408;color:#E5B27A}}
+
 
 /* pills existantes de la demo, restylees en selects Airtable */
 .airgrid .cible,.airgrid .chip,.airgrid .ta-pill,.airgrid .st-pill{
@@ -78,13 +73,7 @@ CSS = r"""
 .airgrid .st-pill.val{background:#EAE2FF!important;color:#4B2D8F!important}
 .airgrid .st-pill.pub{background:#DDF5E4!important;color:#14663A!important}
 .airgrid .date-v{font:500 12.5px var(--fm)!important;color:var(--at-mut)}
-@media (prefers-color-scheme:dark){
- .airgrid .cible.B2C,.airgrid .st-pill.prod{background:#16304D!important;color:#9CC8F5!important}
- .airgrid .cible.B2B,.airgrid .chip.b2b,.airgrid .st-pill.val{background:#26193F!important;color:#BFA8F0!important}
- .airgrid .chip.immo,.airgrid .ta-pill.creer,.airgrid .st-pill.pub{background:#16351F!important;color:#93D8AD!important}
- .airgrid .chip.auto,.airgrid .ta-pill.optimiser{background:#3A2408!important;color:#E5B27A!important}
- .airgrid .chip.conso,.airgrid .st-pill.conf{background:#3A3008!important;color:#E8D07A!important}
- .airgrid .chip.sc,.airgrid .st-pill.opp{background:#2A2922!important;color:#B9B6AA!important}}
+
 
 /* avatar collaborateur */
 .at-user{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
