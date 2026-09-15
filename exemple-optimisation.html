@@ -172,19 +172,22 @@ liste.innerHTML=ANN.map(function(a){
     '<div class="tete"><span class="num">'+a.n+'</span><span class="t">'+a.titre+'</span></div>'+
     '<div class="cat">'+a.cat+'</div>'+
     '<div class="pq">'+a.pourquoi+'</div></div>';}).join("");
-function ouvrir(n){
+function ouvrir(n,defiler){
   document.querySelectorAll(".item").forEach(function(i){i.classList.toggle("ouvert",i.dataset.n===String(n));});
   document.querySelectorAll(".pastille").forEach(function(p){p.classList.toggle("on",p.dataset.n===String(n));});
+  /* Pas de defilement a l'ouverture : la page est aussi affichee en apercu
+     dans la demo, et le saut la positionnerait au mauvais endroit. */
+  if(!defiler)return;
   var it=document.querySelector('.item[data-n="'+n+'"]');
   if(it)it.scrollIntoView({block:"nearest",behavior:"smooth"});
 }
 document.querySelectorAll(".pastille").forEach(function(p){
-  p.addEventListener("click",function(){ouvrir(p.dataset.n);});});
+  p.addEventListener("click",function(){ouvrir(p.dataset.n,true);});});
 liste.addEventListener("click",function(e){
   var it=e.target.closest(".item"); if(!it)return;
-  ouvrir(it.dataset.n);
+  ouvrir(it.dataset.n,false);
   var c=document.querySelector('.pastille[data-n="'+it.dataset.n+'"]');
   if(c)c.scrollIntoView({block:"center",behavior:"smooth"});});
-ouvrir(1);
+ouvrir(1,false);
 </script>
 </body></html>
